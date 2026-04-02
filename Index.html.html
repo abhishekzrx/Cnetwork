@@ -1,0 +1,3294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCQ Quiz Portal</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════
+     DESIGN TOKENS
+  ══════════════════════════════════════════ */
+    :root {
+      /* Palette — deep navy × rose-gold × electric cyan */
+      --bg: #06080f;
+      --surface: #0d1120;
+      --surface2: #131a2e;
+      --surface3: #1a2340;
+      --border: #1e2d4a;
+      --border2: #263658;
+
+      --accent: #c084fc;
+      /* violet */
+      --accent2: #f472b6;
+      /* rose */
+      --accent3: #22d3ee;
+      /* cyan */
+      --gold: #fbbf24;
+      /* amber */
+
+      --text: #e2eaf8;
+      --muted: #5a6e94;
+      --muted2: #8ba4cc;
+
+      --correct: #34d399;
+      --wrong: #fb7185;
+
+      --font-head: 'Bricolage Grotesque', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-xs: 7px;
+
+      --glow-v: rgba(192, 132, 252, 0.18);
+      --glow-c: rgba(34, 211, 238, 0.14);
+      --glow-r: rgba(244, 114, 182, 0.14);
+    }
+
+    /* ── RESET & BASE ── */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NOISE GRAIN */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+      opacity: .5;
+    }
+
+    /* PAGE SYSTEM */
+    .page {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .page.active {
+      display: block;
+      animation: pgIn .22s ease;
+    }
+
+    @keyframes pgIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 4px;
+    }
+
+    /* ══════════════════════════════════════════
+     LANDING — NAVBAR
+  ══════════════════════════════════════════ */
+    .logo {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: -.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo::before {
+      content: '◈';
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .btn-dash {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      color: var(--muted2);
+      padding: 9px 18px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.83rem;
+      font-weight: 600;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .btn-dash:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 20px var(--glow-v);
+    }
+
+    /* ── HERO ── */
+    .main-hero-wrapper {
+      padding: 50px 40px 30px;
+      max-width: 1300px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .main-hero-wrapper::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(52, 211, 153, 0.08), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      animation: pgIn 0.6s ease;
+    }
+
+    .hero-graph-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      height: 100%;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      position: relative;
+    }
+
+    .hero-graph-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent3), var(--accent));
+      border-top-left-radius: var(--radius);
+      border-top-right-radius: var(--radius);
+    }
+
+    .hero-graph-title {
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-graph-title::before {
+      content: '⚡';
+      font-size: 1.1rem;
+    }
+
+    .hero-graph-canvas-wrap {
+      flex: 1;
+      position: relative;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-graph-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted2);
+      font-family: var(--font-mono);
+      font-size: .85rem;
+      line-height: 1.8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .hero-chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      width: 100%;
+    }
+
+    .mini-chapter-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mini-chapter-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      background: var(--surface);
+      box-shadow: 0 8px 24px rgba(192, 132, 252, 0.15);
+    }
+
+    .mini-icon {
+      font-size: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid var(--border2);
+    }
+
+    .mini-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mini-title {
+      font-family: var(--font-head);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .mini-sub {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── LANDING LAYOUT ── */
+    .landing-container {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 0;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 32px 48px;
+      align-items: start;
+    }
+
+    .landing-left {
+      position: sticky;
+      top: 78px;
+      padding-right: 32px;
+      padding-top: 32px;
+    }
+
+    .landing-right {
+      padding-top: 24px;
+    }
+
+    /* ── INSIGHT CARDS ── */
+    .insight-cards-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .insight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-size: .82rem;
+      color: var(--muted2);
+      transition: border-color .2s;
+    }
+
+    .insight-card:hover {
+      border-color: var(--border2);
+    }
+
+    .insight-card strong {
+      color: var(--text);
+      display: block;
+      font-size: .78rem;
+      font-family: var(--font-mono);
+      letter-spacing: .5px;
+      margin-bottom: 3px;
+    }
+
+    /* ── CHAPTERS GRID ── */
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+      padding: 10px 40px 40px;
+      max-width: 1200px;
+    }
+
+    .chapter-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 22px;
+      cursor: pointer;
+      transition: all .28s cubic-bezier(.4, 0, .2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chapter-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--glow-v), transparent 60%);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+
+    .chapter-card:hover {
+      border-color: rgba(192, 132, 252, .45);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 48px rgba(192, 132, 252, .12);
+    }
+
+    .chapter-card:hover::before {
+      opacity: 1;
+    }
+
+    .chapter-num {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      color: var(--accent);
+      letter-spacing: 2.5px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .chapter-name {
+      font-family: var(--font-head);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .chapter-desc {
+      color: var(--muted2);
+      font-size: .8rem;
+      margin-bottom: 14px;
+    }
+
+    .badges {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 11px;
+      border-radius: 50px;
+      font-size: .67rem;
+      font-family: var(--font-mono);
+      border: 1px solid var(--border2);
+      background: var(--surface2);
+      color: var(--muted);
+    }
+
+    .badge.has-q {
+      border-color: rgba(192, 132, 252, .4);
+      color: var(--accent);
+      background: rgba(192, 132, 252, .07);
+    }
+
+    .badge.no-q {
+      color: var(--muted);
+    }
+
+    .badge.done {
+      border-color: rgba(52, 211, 153, .4);
+      color: var(--correct);
+      background: rgba(52, 211, 153, .07);
+    }
+
+    /* ── EDITOR ── */
+    .editor-section {
+      margin: 0 40px 48px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .editor-top {
+      padding: 18px 26px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .editor-title {
+      font-family: var(--font-head);
+      font-size: .92rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .editor-title::before {
+      content: '⬡';
+      color: var(--accent3);
+      font-size: .9rem;
+    }
+
+    .edit-tabs {
+      display: flex;
+      overflow-x: auto;
+    }
+
+    .edit-tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: .74rem;
+      color: var(--muted);
+      border: none;
+      background: none;
+      white-space: nowrap;
+      transition: all .18s;
+      border-bottom: 2px solid transparent;
+      letter-spacing: .3px;
+    }
+
+    .edit-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .edit-tab:hover:not(.active) {
+      color: var(--text);
+    }
+
+    .set-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .set-tab {
+      padding: 6px 15px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      color: var(--muted2);
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      border-radius: 50px;
+      transition: all .18s;
+    }
+
+    .set-tab.active {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(192, 132, 252, .08);
+    }
+
+    .set-tab.filled {
+      border-color: var(--correct);
+      color: var(--correct);
+    }
+
+    .edit-panel {
+      display: none;
+      padding: 24px 26px;
+    }
+
+    .edit-panel.active {
+      display: block;
+    }
+
+    .set-panel {
+      display: none;
+    }
+
+    .set-panel.active {
+      display: block;
+    }
+
+    .fmt-hint {
+      background: rgba(34, 211, 238, .06);
+      border: 1px solid rgba(34, 211, 238, .2);
+      border-radius: var(--radius-sm);
+      padding: 13px 17px;
+      margin-bottom: 14px;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: var(--muted2);
+      line-height: 1.9;
+    }
+
+    .fmt-hint .h1 {
+      color: var(--accent);
+    }
+
+    .fmt-hint .h2 {
+      color: var(--accent3);
+    }
+
+    .panel-count {
+      font-size: .83rem;
+      color: var(--muted2);
+      margin-bottom: 10px;
+    }
+
+    .panel-count b {
+      color: var(--accent3);
+    }
+
+    textarea.mcq-ta {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      padding: 13px 15px;
+      resize: vertical;
+      min-height: 200px;
+      line-height: 1.75;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    textarea.mcq-ta:focus {
+      border-color: var(--accent);
+    }
+
+    textarea.mcq-ta.err {
+      border-color: var(--wrong);
+    }
+
+    .edit-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      border: none;
+      padding: 9px 22px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: .84rem;
+      transition: all .2s;
+      box-shadow: 0 4px 16px var(--glow-v);
+    }
+
+    .btn-save:hover {
+      opacity: .88;
+      transform: translateY(-1px);
+    }
+
+    .btn-clr-ch {
+      background: none;
+      border: 1px solid rgba(251, 113, 133, .35);
+      color: var(--wrong);
+      padding: 8px 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: .8rem;
+      transition: all .2s;
+    }
+
+    .btn-clr-ch:hover {
+      background: var(--wrong);
+      color: #fff;
+      border-color: var(--wrong);
+    }
+
+    .save-msg {
+      font-family: var(--font-mono);
+      font-size: .73rem;
+      padding: 5px 13px;
+      border-radius: 50px;
+    }
+
+    .save-msg.ok {
+      background: rgba(52, 211, 153, .1);
+      color: var(--correct);
+      border: 1px solid rgba(52, 211, 153, .35);
+    }
+
+    .save-msg.er {
+      background: rgba(251, 113, 133, .1);
+      color: var(--wrong);
+      border: 1px solid rgba(251, 113, 133, .35);
+    }
+
+    /* ── BULK UPLOAD ── */
+    .bulk-panel {
+      padding: 24px 26px;
+    }
+
+    .bulk-banner {
+      background: linear-gradient(135deg, rgba(192, 132, 252, .1), rgba(34, 211, 238, .07));
+      border: 1px solid rgba(192, 132, 252, .35);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .bulk-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .bulk-banner-text h4 {
+      font-family: var(--font-head);
+      font-size: .92rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--accent);
+    }
+
+    .bulk-banner-text p {
+      font-size: .8rem;
+      color: var(--muted2);
+      line-height: 1.6;
+    }
+
+    .bulk-preview {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .bulk-preview.visible {
+      display: block;
+    }
+
+    .bulk-preview-title {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      color: var(--accent3);
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .bulk-set-previews {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .bulk-set-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      text-align: center;
+    }
+
+    .bulk-set-box.ready {
+      border-color: rgba(52, 211, 153, .5);
+    }
+
+    .bulk-set-box.short {
+      border-color: #fbbf2455;
+    }
+
+    .bsb-num {
+      font-family: var(--font-mono);
+      font-size: .63rem;
+      color: var(--muted2);
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+
+    .bsb-count {
+      font-family: var(--font-head);
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .bsb-count.c-ok {
+      color: var(--correct);
+    }
+
+    .bsb-count.c-warn {
+      color: #fbbf24;
+    }
+
+    .bsb-label {
+      font-size: .7rem;
+      color: var(--muted2);
+      margin-top: 3px;
+    }
+
+    .btn-bulk-save {
+      background: linear-gradient(135deg, var(--accent3), var(--accent));
+      color: #000;
+      border: none;
+      padding: 11px 28px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-weight: 800;
+      font-size: .88rem;
+      transition: opacity .2s;
+    }
+
+    .btn-bulk-save:hover {
+      opacity: .88;
+    }
+
+    .btn-bulk-clear {
+      background: none;
+      border: 1px solid rgba(251, 113, 133, .35);
+      color: var(--wrong);
+      padding: 10px 18px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: .8rem;
+      transition: all .2s;
+    }
+
+    .btn-bulk-clear:hover {
+      background: var(--wrong);
+      color: #fff;
+      border-color: var(--wrong);
+    }
+
+    /* ── GOOGLE SHEETS SECTION ── */
+    .sheets-section {
+      margin: 0 40px 60px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sheets-section::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, var(--glow-c), transparent 70%);
+      pointer-events: none;
+    }
+
+    .sheets-section h3 {
+      font-family: var(--font-head);
+      font-size: .95rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sheets-section p {
+      font-size: .83rem;
+      color: var(--muted2);
+      margin-bottom: 14px;
+      line-height: 1.65;
+    }
+
+    .sheets-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .sheets-row input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .sheets-row input:focus {
+      border-color: var(--accent3);
+    }
+
+    .sheets-row button {
+      background: var(--accent3);
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 700;
+      font-family: var(--font-body);
+      white-space: nowrap;
+      transition: opacity .2s;
+    }
+
+    .sheets-row button:hover {
+      opacity: .88;
+    }
+
+    .subject-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      align-items: center;
+    }
+
+    .subject-row label {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      color: var(--accent3);
+      letter-spacing: 2px;
+      white-space: nowrap;
+    }
+
+    .subject-row input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid rgba(34, 211, 238, .35);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font-head);
+      font-size: .9rem;
+      font-weight: 700;
+      padding: 9px 14px;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .subject-row input:focus {
+      border-color: var(--accent3);
+    }
+
+    .subject-badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 4px 13px;
+      border-radius: 50px;
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      background: rgba(34, 211, 238, .08);
+      border: 1px solid rgba(34, 211, 238, .3);
+      color: var(--accent3);
+    }
+
+    /* ══════════════════════════════════════════
+     SET PICKER PAGE
+  ══════════════════════════════════════════ */
+    .set-picker-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 50px 24px;
+    }
+
+    .set-picker-title {
+      font-family: var(--font-head);
+      font-size: 1.7rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -.5px;
+    }
+
+    .set-picker-sub {
+      color: var(--muted2);
+      font-size: .88rem;
+      margin-bottom: 36px;
+    }
+
+    .sets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 14px;
+    }
+
+    .set-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      cursor: pointer;
+      transition: all .28s cubic-bezier(.4, 0, .2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .set-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0;
+      transition: opacity .25s;
+    }
+
+    .set-card:hover {
+      border-color: rgba(192, 132, 252, .45);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 44px rgba(192, 132, 252, .12);
+    }
+
+    .set-card:hover::before {
+      opacity: 1;
+    }
+
+    .set-card.locked {
+      opacity: .38;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .set-num {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .set-name {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .set-info {
+      color: var(--muted2);
+      font-size: .8rem;
+      margin-bottom: 13px;
+    }
+
+    /* ══════════════════════════════════════════
+     QUIZ HEADER & PROGRESS
+  ══════════════════════════════════════════ */
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 28px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(6, 8, 15, .9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 100;
+      gap: 12px;
+    }
+
+    .back-btn {
+      background: none;
+      border: 1px solid var(--border2);
+      color: var(--muted2);
+      padding: 7px 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: .8rem;
+      font-weight: 600;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .back-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .quiz-meta {
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      color: var(--muted2);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dot {
+      opacity: .3;
+    }
+
+    .progress-bar-wrap {
+      height: 2px;
+      background: var(--surface2);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+      transition: width .4s ease;
+      width: 0%;
+    }
+
+    /* ══════════════════════════════════════════
+     QUIZ BODY — QUESTIONS
+  ══════════════════════════════════════════ */
+    .quiz-body {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 36px 24px 90px;
+    }
+
+    .set-label {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      color: var(--accent3);
+      letter-spacing: 3px;
+      margin-bottom: 26px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+    }
+
+    .q-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px 28px;
+      margin-bottom: 18px;
+      transition: all .25s ease;
+      position: relative;
+    }
+
+    .q-block::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--border2);
+      border-radius: 3px 0 0 3px;
+      transition: background .25s;
+    }
+
+    .q-block:hover {
+      border-color: var(--border2);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, .25);
+    }
+
+    .q-block:hover::before {
+      background: var(--accent);
+    }
+
+    .q-block.answered::before {
+      background: var(--correct);
+    }
+
+    .q-block.answered {
+      border-color: rgba(52, 211, 153, .2);
+    }
+
+    .q-meta {
+      font-family: var(--font-mono);
+      font-size: .63rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .q-text {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 18px;
+      color: var(--text);
+    }
+
+    .opts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt-btn {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 15px;
+      cursor: pointer;
+      text-align: left;
+      color: var(--muted2);
+      font-family: var(--font-body);
+      font-size: .88rem;
+      font-weight: 500;
+      transition: all .2s;
+      width: 100%;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      border-color: rgba(192, 132, 252, .4);
+      background: rgba(192, 132, 252, .06);
+      color: var(--text);
+    }
+
+    .opt-btn.selected {
+      border-color: rgba(52, 211, 153, .5);
+      background: rgba(52, 211, 153, .07);
+      color: var(--text);
+      box-shadow: 0 0 0 1px rgba(52, 211, 153, .15);
+    }
+
+    .opt-btn.correct {
+      border-color: var(--correct);
+      background: rgba(52, 211, 153, .09);
+      color: var(--correct);
+    }
+
+    .opt-btn.correct::after {
+      content: '✓';
+      margin-left: auto;
+      font-weight: 800;
+      color: var(--correct);
+    }
+
+    .opt-btn.wrong {
+      border-color: var(--wrong);
+      background: rgba(251, 113, 133, .08);
+      color: var(--wrong);
+    }
+
+    .opt-btn.wrong::after {
+      content: '✗';
+      margin-left: auto;
+      font-weight: 800;
+      color: var(--wrong);
+    }
+
+    .opt-btn:disabled {
+      cursor: default;
+    }
+
+    .opt-lbl {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-xs);
+      background: var(--surface3);
+      border: 1px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      transition: all .2s;
+      color: var(--muted2);
+    }
+
+    .opt-btn.selected .opt-lbl {
+      background: var(--correct);
+      border-color: var(--correct);
+      color: #000;
+    }
+
+    .opt-btn.correct .opt-lbl {
+      background: var(--correct);
+      border-color: var(--correct);
+      color: #000;
+    }
+
+    .opt-btn.wrong .opt-lbl {
+      background: var(--wrong);
+      border-color: var(--wrong);
+      color: #fff;
+    }
+
+    .opt-btn:hover:not(:disabled):not(.selected):not(.correct):not(.wrong) .opt-lbl {
+      background: rgba(192, 132, 252, .15);
+      border-color: rgba(192, 132, 252, .4);
+      color: var(--accent);
+    }
+
+    /* ── SUBMIT BAR ── */
+    .submit-bar {
+      position: sticky;
+      bottom: 0;
+      background: linear-gradient(to top, var(--bg) 65%, transparent);
+      padding: 24px 0 10px;
+      margin-top: 10px;
+    }
+
+    .submit-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: rgba(13, 17, 32, .92);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      padding: 14px 22px;
+      box-shadow: 0 4px 32px rgba(0, 0, 0, .4);
+    }
+
+    .answered-count {
+      font-family: var(--font-mono);
+      font-size: .76rem;
+      color: var(--muted2);
+    }
+
+    .answered-count b {
+      color: var(--accent3);
+    }
+
+    .btn-submit-set {
+      background: linear-gradient(135deg, var(--accent3), var(--accent));
+      color: #000;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-weight: 800;
+      font-size: .9rem;
+      transition: all .2s;
+      box-shadow: 0 4px 18px var(--glow-c);
+    }
+
+    .btn-submit-set:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px var(--glow-c);
+    }
+
+    /* ══════════════════════════════════════════
+     RESULT PAGE
+  ══════════════════════════════════════════ */
+    .result-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 24px;
+      padding: 44px 36px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      animation: slideUp .45s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 240px;
+      height: 160px;
+      background: radial-gradient(ellipse, var(--glow-v), transparent 70%);
+      pointer-events: none;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .result-emoji {
+      font-size: 2.6rem;
+      margin-bottom: 12px;
+    }
+
+    .result-title {
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -.4px;
+    }
+
+    .result-sub {
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      color: var(--accent3);
+      letter-spacing: 2px;
+      margin-bottom: 26px;
+      text-transform: uppercase;
+    }
+
+    .score-ring {
+      position: relative;
+      width: 148px;
+      margin: 0 auto 26px;
+    }
+
+    .score-ring svg {
+      width: 100%;
+    }
+
+    .score-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-head);
+      font-size: 1.9rem;
+      font-weight: 800;
+    }
+
+    .score-denom {
+      font-size: .9rem;
+      color: var(--muted2);
+      font-weight: 400;
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .stat span {
+      font-family: var(--font-head);
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .stat small {
+      color: var(--muted2);
+      font-size: .62rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: var(--font-mono);
+    }
+
+    .sync-status {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      margin-bottom: 14px;
+      min-height: 16px;
+      color: var(--muted2);
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-review,
+    .btn-retry,
+    .btn-sets,
+    .btn-home {
+      padding: 10px 18px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: .84rem;
+      transition: all .2s;
+      border: 1px solid var(--border2);
+    }
+
+    .btn-review {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      color: #fff;
+      box-shadow: 0 3px 14px var(--glow-v);
+    }
+
+    .btn-review:hover {
+      opacity: .88;
+    }
+
+    .btn-retry {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .btn-retry:hover {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    .btn-sets {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .btn-sets:hover {
+      border-color: var(--accent3);
+      color: var(--accent3);
+    }
+
+    .btn-home {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .btn-home:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ══════════════════════════════════════════
+     REVIEW PAGE
+  ══════════════════════════════════════════ */
+    .review-body {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .review-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+    }
+
+    .review-item.r-correct {
+      border-left: 3px solid var(--correct);
+    }
+
+    .review-item.r-wrong {
+      border-left: 3px solid var(--wrong);
+    }
+
+    .review-item.r-skipped {
+      border-left: 3px solid var(--muted);
+    }
+
+    .review-q {
+      font-family: var(--font-head);
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: .92rem;
+      line-height: 1.55;
+    }
+
+    .review-opts {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .review-opt {
+      padding: 9px 14px;
+      border-radius: var(--radius-sm);
+      font-size: .82rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted2);
+    }
+
+    .review-opt.correct-ans {
+      background: rgba(52, 211, 153, .09);
+      border-color: rgba(52, 211, 153, .4);
+      color: var(--correct);
+    }
+
+    .review-opt.wrong-ans {
+      background: rgba(251, 113, 133, .08);
+      border-color: rgba(251, 113, 133, .35);
+      color: var(--wrong);
+    }
+
+    /* ══════════════════════════════════════════
+     DASHBOARD
+  ══════════════════════════════════════════ */
+    .dashboard-body {
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .dash-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dash-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+
+    .dash-lbl {
+      font-family: var(--font-mono);
+      font-size: .64rem;
+      color: var(--muted2);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .dash-val {
+      font-family: var(--font-head);
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+
+    .dash-val.c-a {
+      color: var(--accent);
+    }
+
+    .dash-val.c-g {
+      color: var(--correct);
+    }
+
+    .dash-val.c-r {
+      color: var(--wrong);
+    }
+
+    .dash-section {
+      font-family: var(--font-head);
+      font-size: .95rem;
+      font-weight: 700;
+      margin-bottom: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+    }
+
+    .dash-section::before {
+      content: '';
+      flex: 0 0 16px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 1px;
+    }
+
+    .stat-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 50px;
+      padding: 6px 13px;
+      font-size: .8rem;
+      color: var(--text);
+    }
+
+    /* HEATMAP */
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: 100px repeat(5, 1fr);
+      gap: 6px;
+      align-items: center;
+    }
+
+    .heat-box {
+      border-radius: 6px;
+      height: 26px;
+      border: 1px solid var(--border);
+      transition: transform .15s;
+    }
+
+    .heat-box:hover {
+      transform: scale(1.15);
+    }
+
+    .bg-g {
+      background: rgba(52, 211, 153, .8);
+      border-color: rgba(52, 211, 153, 1);
+    }
+
+    .bg-y {
+      background: rgba(251, 191, 36, .8);
+      border-color: rgba(251, 191, 36, 1);
+    }
+
+    .bg-r {
+      background: rgba(251, 113, 133, .8);
+      border-color: rgba(251, 113, 133, 1);
+    }
+
+    .bg-none {
+      background: var(--surface2);
+    }
+
+    /* CALENDAR */
+    .cal-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .cal-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      min-width: 600px;
+      gap: 12px;
+    }
+
+    .cal-title {
+      font-family: var(--font-head);
+      font-size: 1rem;
+    }
+
+    .cal-stats {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .cal-stat {
+      font-size: .78rem;
+      color: var(--muted2);
+    }
+
+    .cal-stat b {
+      color: var(--text);
+      font-size: .9rem;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-rows: repeat(7, 1fr);
+      grid-auto-flow: column;
+      gap: 5px;
+      min-width: 600px;
+      padding-bottom: 8px;
+    }
+
+    .cal-box {
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+      background: var(--surface2);
+      transition: all .12s;
+    }
+
+    .cal-box:hover {
+      transform: scale(1.35);
+      border: 1px solid var(--muted2);
+      position: relative;
+      z-index: 2;
+    }
+
+    .cal-legend {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+      font-size: .72rem;
+      color: var(--muted2);
+      min-width: 600px;
+    }
+
+    .lvl-0 {
+      background: var(--surface2);
+    }
+
+    .lvl-1 {
+      background: rgba(52, 211, 153, .3);
+    }
+
+    .lvl-2 {
+      background: rgba(52, 211, 153, .65);
+    }
+
+    .lvl-3 {
+      background: rgba(52, 211, 153, 1);
+      box-shadow: 0 0 6px rgba(52, 211, 153, .4);
+    }
+
+    .dash-insights {
+      background: linear-gradient(135deg, rgba(192, 132, 252, .1), rgba(34, 211, 238, .07));
+      border: 1px solid rgba(192, 132, 252, .3);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      font-family: var(--font-body);
+      line-height: 1.65;
+    }
+
+    .dash-insights h4 {
+      color: var(--accent);
+      font-family: var(--font-head);
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+
+    .dash-insights ul {
+      margin-left: 18px;
+      color: var(--text);
+    }
+
+    .dash-insights li {
+      margin-bottom: 5px;
+    }
+
+    /* CHARTS */
+    .dash-charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .chart-card h4 {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      color: var(--accent3);
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* HISTORY TABLE */
+    .hist-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .hist-table th {
+      background: var(--surface2);
+      font-family: var(--font-mono);
+      font-size: .63rem;
+      letter-spacing: 2px;
+      color: var(--muted2);
+      text-align: left;
+      padding: 12px 16px;
+      text-transform: uppercase;
+    }
+
+    .hist-table td {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      font-size: .85rem;
+    }
+
+    .hist-table tr:hover td {
+      background: var(--surface2);
+    }
+
+    .b-score {
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-family: var(--font-mono);
+      font-size: .69rem;
+    }
+
+    .b-score.good {
+      background: rgba(52, 211, 153, .1);
+      color: var(--correct);
+      border: 1px solid rgba(52, 211, 153, .35);
+    }
+
+    .b-score.mid {
+      background: rgba(251, 191, 36, .1);
+      color: #fbbf24;
+      border: 1px solid #fbbf2455;
+    }
+
+    .b-score.low {
+      background: rgba(251, 113, 133, .1);
+      color: var(--wrong);
+      border: 1px solid rgba(251, 113, 133, .35);
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 60px;
+      color: var(--muted2);
+      font-family: var(--font-mono);
+      font-size: .82rem;
+      line-height: 2.2;
+    }
+
+    .btn-danger {
+      background: none;
+      border: 1px solid rgba(251, 113, 133, .4);
+      color: var(--wrong);
+      padding: 7px 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: .8rem;
+      transition: all .2s;
+    }
+
+    .btn-danger:hover {
+      background: var(--wrong);
+      color: #fff;
+    }
+
+    /* ══════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════ */
+    @media(max-width:900px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .hero-graph-container {
+        min-height: 240px;
+      }
+
+      .hero-chapters-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .landing-container {
+        grid-template-columns: 1fr;
+        padding: 0 24px 40px;
+      }
+
+      .landing-left {
+        position: static;
+        padding-right: 0;
+        padding-top: 24px;
+      }
+
+      .landing-right {
+        padding-top: 0;
+      }
+    }
+
+    @media(max-width:640px) {
+      .main-hero-wrapper {
+        padding: 24px 20px;
+      }
+
+      .btn-hero-primary,
+      .btn-hero-sec {
+        width: 100%;
+      }
+
+      .hero-right {
+        margin-top: 0px;
+      }
+
+      .hero-chapters-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .mini-chapter-card {
+        padding: 14px 12px;
+        gap: 10px;
+      }
+
+      .mini-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 1.25rem;
+      }
+
+      .chapters-grid,
+      .sets-grid {
+        padding: 10px 18px 28px;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .editor-section,
+      .sheets-section {
+        margin-left: 18px;
+        margin-right: 18px;
+      }
+
+      .quiz-header {
+        padding: 13px 18px;
+      }
+
+      .quiz-body {
+        padding: 24px 14px 80px;
+      }
+
+      .q-block {
+        padding: 18px 16px;
+      }
+
+      .result-card {
+        padding: 32px 22px;
+      }
+
+      .result-stats {
+        gap: 8px;
+      }
+
+      .result-actions {
+        gap: 7px;
+      }
+
+      .result-actions button {
+        padding: 9px 14px;
+        font-size: .8rem;
+      }
+
+      .dashboard-body {
+        padding: 24px 16px;
+      }
+
+      .dash-charts {
+        grid-template-columns: 1fr;
+      }
+
+      .heatmap-grid {
+        grid-template-columns: 72px repeat(5, 1fr);
+      }
+
+      .set-picker-wrap {
+        padding: 30px 16px;
+      }
+
+      .submit-inner {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .btn-submit-set {
+        width: 100%;
+        text-align: center;
+      }
+
+      .bulk-set-previews {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .sheets-row {
+        flex-direction: column;
+      }
+
+      .cal-header,
+      .cal-grid,
+      .cal-legend {
+        min-width: 520px;
+      }
+    }
+
+    @media(max-width:420px) {
+
+      .chapters-grid,
+      .sets-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bulk-set-previews {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .result-stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .quiz-meta {
+        font-size: .7rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── LANDING ─────────────────────────────────────────────── -->
+  <div id="landing-page" class="page active">
+    <!-- NAVBAR -->
+    <div
+      style="position:sticky; top:0; z-index:50; background:rgba(13,13,20,0.85); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border);">
+      <div
+        style="display:flex; align-items:center; justify-content:space-between; padding:20px 40px; max-width:1400px; margin:0 auto;">
+        <div class="logo">📚 CN</div>
+        <div style="display:flex; gap:12px;">
+          <button class="btn-dash" style="background:var(--accent); color:#fff; border:none;" onclick="goHome()">📚
+            Chapters</button>
+          <button class="btn-dash" onclick="showDashboard()">📊 Dashboard</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN HERO SECTION -->
+    <section class="main-hero-wrapper">
+      <div class="hero-content">
+        <div class="hero-left">
+          <div class="hero-graph-container">
+            <h4 class="hero-graph-title">Performance Trend</h4>
+            <div id="heroGraphEmpty" class="hero-graph-empty" style="display:none;">
+              Your performance graph will appear here once you complete practice sets.
+            </div>
+            <div class="hero-graph-canvas-wrap" id="heroGraphCanvasWrap">
+              <canvas id="heroTrendChart"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-chapters-grid" id="heroChaptersGrid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDITOR -->
+    <div style="display: none;" id="editTabs"></div>
+    <div style="display: none;" id="editPanels"></div>
+
+    <!-- GOOGLE SHEETS -->
+    <div class="sheets-section">
+      <h3>🔗 Google Sheets Integration (Optional)</h3>
+      <p>Each copy of this app can represent a different subject. Set the subject name below — results will
+        automatically go to a dedicated sheet tab with that name inside your Google Spreadsheet.</p>
+      <div class="subject-row">
+        <label>SUBJECT NAME</label>
+        <input type="text" id="subjectName" placeholder="e.g. DBMS, Networks, Maths..." oninput="previewSubject()" />
+      </div>
+      <div id="subjectPreview"></div>
+      <p style="margin-top:16px">Paste your Google Apps Script Web App URL below:</p>
+      <div class="sheets-row">
+        <input type="text" id="sheetsUrl" placeholder="https://script.google.com/macros/s/YOUR_ID/exec" />
+        <button onclick="saveSheetUrl()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SET PICKER ───────────────────────────────────────────── -->
+  <div id="set-picker-page" class="page">
+    <header class="quiz-header">
+      <button class="back-btn" onclick="goHome()">← Back</button>
+      <div class="quiz-meta"><span id="pickerChapterLabel">Chapter 1</span><span class="dot">•</span><span>Choose a
+          Set</span></div>
+      <div></div>
+    </header>
+    <div class="set-picker-wrap">
+      <div class="set-picker-title" id="pickerTitle">Chapter 1</div>
+      <div class="set-picker-sub">Select a set to begin. Each set contains 20 questions.</div>
+      <div class="sets-grid" id="setsGrid"></div>
+    </div>
+  </div>
+
+  <!-- ── QUIZ ─────────────────────────────────────────────────── -->
+  <div id="quiz-page" class="page">
+    <header class="quiz-header">
+      <button class="back-btn" onclick="backToSets()">← Sets</button>
+      <div class="quiz-meta">
+        <span id="quizChapterLabel">Chapter 1</span>
+        <span class="dot">•</span>
+        <span id="quizSetLabel">Set 1</span>
+        <span class="dot">•</span>
+        <span id="quizQCount">20 Questions</span>
+      </div>
+      <div></div>
+    </header>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar" style="width:0%"></div>
+    </div>
+    <div class="quiz-body">
+      <div class="set-label" id="setLabel">SET 1 — CHAPTER 1</div>
+      <div id="questionsContainer"></div>
+      <div class="submit-bar">
+        <div class="submit-inner">
+          <div class="answered-count" id="answeredCount"><b>0</b> / 20 answered</div>
+          <button class="btn-submit-set" onclick="submitSet()">Submit Set ✓</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RESULT ────────────────────────────────────────────────── -->
+  <div id="result-page" class="page">
+    <div class="result-wrap">
+      <div class="result-card">
+        <div class="result-emoji" id="rEmoji">🎉</div>
+        <h2 class="result-title" id="rTitle">Set Complete!</h2>
+        <div class="result-sub" id="rSub">CHAPTER 1 — SET 1</div>
+        <div class="score-ring">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#1a1a2e" stroke-width="10" />
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="10" stroke-dasharray="314"
+              stroke-dashoffset="314" id="scoreCircle" stroke-linecap="round" transform="rotate(-90 60 60)" />
+          </svg>
+          <div class="score-text"><span id="rScore">0</span><span class="score-denom" id="rTotal">/20</span></div>
+        </div>
+        <div class="result-stats">
+          <div class="stat"><span id="rCorrect">0</span><small>Correct</small></div>
+          <div class="stat"><span id="rWrong">0</span><small>Wrong</small></div>
+          <div class="stat"><span id="rSkipped">0</span><small>Skipped</small></div>
+        </div>
+        <div class="sync-status" id="syncStatus"></div>
+        <div class="result-actions">
+          <button class="btn-review" onclick="reviewAnswers()">📋 Review</button>
+          <button class="btn-retry" onclick="retrySet()">🔄 Retry</button>
+          <button class="btn-sets" onclick="backToSets()">📂 Other Sets</button>
+          <button class="btn-home" onclick="goHome()">🏠 Home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── REVIEW ────────────────────────────────────────────────── -->
+  <div id="review-page" class="page">
+    <header class="quiz-header">
+      <button class="back-btn" onclick="showPage('result-page')">← Results</button>
+      <div class="quiz-meta">Answer Review</div>
+      <div></div>
+    </header>
+    <div class="review-body" id="reviewBody"></div>
+  </div>
+
+  <!-- ── DASHBOARD ─────────────────────────────────────────────── -->
+  <div id="dashboard-page" class="page">
+    <header class="quiz-header">
+      <button class="back-btn" onclick="goHome()">← Home</button>
+      <div class="quiz-meta">📊 Performance Dashboard</div>
+      <button class="btn-danger" onclick="clearAllData()">🗑 Clear All</button>
+    </header>
+    <div class="dashboard-body" id="dashboardBody"></div>
+  </div>
+
+  <!-- REQUIRED JS FILES FOR INJECTING 100 MCQS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="CNMCQS_1.js"></script>
+  <script src="CNMCQS_2.js"></script>
+  <script src="CNMCQS_3.js"></script>
+  <script src="CNMCQS_4.js"></script>
+  <script src="CNMCQS_5.js"></script>
+
+  <script>
+    // ══════════════════════════════════════════════════════════════
+    //  CONFIG
+    // ══════════════════════════════════════════════════════════════
+    const CHAPTERS = [
+      { id: 1, name: "Chapter 1", desc: "First Chapter" },
+      { id: 2, name: "Chapter 2", desc: "Second Chapter" },
+      { id: 3, name: "Chapter 3", desc: "Third Chapter" },
+      { id: 4, name: "Chapter 4", desc: "Fourth Chapter" },
+      { id: 5, name: "Chapter 5", desc: "Fifth Chapter" },
+    ];
+    const SETS_PER_CHAPTER = 5;
+    const QS_PER_SET = 20;
+
+    // ══════════════════════════════════════════════════════════════
+    //  STORAGE
+    // ══════════════════════════════════════════════════════════════
+    function saveSetMCQs(chId, setNum, qs) {
+      // Deprecated: UI editing is disabled, reading statically from JS files.
+    }
+
+    function loadSetMCQs(chId, setNum) {
+      const allQs = window['CNMCQS_' + chId];
+      if (allQs && Array.isArray(allQs)) {
+        const start = (setNum - 1) * QS_PER_SET;
+        return allQs.slice(start, start + QS_PER_SET);
+      }
+      return [];
+    }
+
+    // Count total questions across all sets for a chapter
+    function countChapterQs(chId) {
+      const allQs = window['CNMCQS_' + chId];
+      if (allQs && Array.isArray(allQs)) {
+        return allQs.length;
+      }
+      return 0;
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  PARSER
+    // ══════════════════════════════════════════════════════════════
+    function parseMCQs(text) {
+      const results = [];
+      text = text.replace(/\r\n/g, '\n');
+      let blocks = text.split(/(?:^|\n)(?=\s*(?:Q\.?\s*)?\d+[\.\)]\s+)/i).filter(b => b.trim());
+      if (blocks.length === 1) {
+        const aggressive = text.split(/(?=\s+(?:Q\.?\s*)?\d+[\.\)]\s+)/i).filter(b => b.trim());
+        if (aggressive.length > 1) blocks = aggressive;
+      }
+      for (let block of blocks) {
+        let qText = "";
+        let options = [];
+        let ansIdx = 0;
+        const ansRegex = /(?:\n|\s|^)(?:ans(?:wer)?|key|correct)[\s:=-]+([a-dA-D1-4])/i;
+        const ansMatch = block.match(ansRegex);
+        if (ansMatch) {
+          const val = ansMatch[1].toLowerCase();
+          ansIdx = /\d/.test(val) ? parseInt(val) - 1 : 'abcd'.indexOf(val);
+          block = block.replace(ansRegex, '');
+        }
+        const optRegex = /(?:^|\n|\s)(?:\([a-d]\)|[a-d][\.\)])\s+/ig;
+        let match;
+        let lastIdx = 0;
+        const parts = [];
+        while ((match = optRegex.exec(block)) !== null) {
+          parts.push(block.substring(lastIdx, match.index).trim());
+          lastIdx = optRegex.lastIndex;
+        }
+        parts.push(block.substring(lastIdx).trim());
+        if (parts.length >= 3) {
+          qText = parts[0];
+          options = parts.slice(1).filter(t => t);
+        } else {
+          const lines = block.split('\n').map(l => l.trim()).filter(l => l);
+          qText = lines[0];
+          options = lines.slice(1);
+        }
+        if (!qText || options.length < 2) continue;
+        qText = qText.replace(/^\s*(?:Q\.?\s*)?\d+[\.\)]\s*/i, '').trim();
+        results.push({
+          question: qText || "Missing Question",
+          options: options.slice(0, 4),
+          answer: Math.max(0, ansIdx)
+        });
+      }
+      return results;
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  EDITOR UI  — Chapter tabs → Set sub-tabs → Textarea
+    // ══════════════════════════════════════════════════════════════
+    function buildEditor() {
+      const tabs = document.getElementById('editTabs');
+      const panels = document.getElementById('editPanels');
+      tabs.innerHTML = panels.innerHTML = '';
+
+      CHAPTERS.forEach((ch, idx) => {
+        // Chapter tab
+        const tab = document.createElement('button');
+        tab.className = 'edit-tab' + (idx === 0 ? ' active' : '');
+        tab.textContent = ch.name;
+        tab.id = `tab_${ch.id}`;
+        tab.onclick = () => switchChTab(ch.id);
+        tabs.appendChild(tab);
+
+        // Chapter panel
+        const panel = document.createElement('div');
+        panel.className = 'edit-panel' + (idx === 0 ? ' active' : '');
+        panel.id = `panel_${ch.id}`;
+
+        // Build set sub-tabs + sub-panels
+
+        // ── Build tabs: Inject first, then Set 1-5
+        let setTabsHtml = '<div class="set-tabs">';
+        let setPanelsHtml = '';
+
+        // INJECT tab
+        const injectActive = ' active';
+        setTabsHtml += '<button class="set-tab' + injectActive + '" id="stab_' + ch.id + '_inject" onclick="switchSetTab(' + ch.id + ',\'inject\')" style="background:rgba(124,106,255,0.15);border-color:var(--accent);color:var(--accent)">💉 Inject JS (100 Q)</button>';
+
+        setPanelsHtml += '<div class="set-panel active bulk-panel" id="spanel_' + ch.id + '_inject">'
+          + '<div class="bulk-banner"><div class="bulk-icon">💉</div><div class="bulk-banner-text">'
+          + '<h4>Inject Questions from <code>CNMCQS_' + ch.id + '.js</code></h4>'
+          + '<p>Ensure you have configured <code>window.CNMCQS_' + ch.id + '</code> in the designated JS file in the same folder. Clicking below will auto-inject and split the 100 questions into the 5 sets.</p>'
+          + '</div></div>'
+          + '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px;">'
+          + '<button class="btn-bulk-save" onclick="injectFromJS(' + ch.id + ')">💉 Inject All 5 Sets</button>'
+          + '<button class="btn-clr-ch" onclick="clearChapterSets(' + ch.id + ')">🗑 Clear Saved Sets</button>'
+          + '<span class="save-msg" id="inject_msg_' + ch.id + '"></span>'
+          + '</div></div>';
+
+        // Individual Set 1-5 tabs
+        for (let s = 1; s <= SETS_PER_CHAPTER; s++) {
+          const saved = loadSetMCQs(ch.id, s);
+          const filledCls = saved.length > 0 ? ' filled' : '';
+          const checkmark = saved.length > 0 ? ' \u2713' : '';
+          setTabsHtml += '<button class="set-tab' + filledCls + '" id="stab_' + ch.id + '_' + s + '" onclick="switchSetTab(' + ch.id + ',' + s + ')">Set ' + s + checkmark + '</button>';
+
+          const taPlaceholder = 'Paste 20 MCQs for ' + ch.name + ' \u2014 Set ' + s + '...\\n\\n1. Example question?\\na) First option\\nb) Second option\\nc) Third option\\nd) Fourth option\\nAnswer: b';
+          setPanelsHtml += '<div class="set-panel" id="spanel_' + ch.id + '_' + s + '" style="padding:22px 26px 26px">'
+            + '<div class="fmt-hint">'
+            + '<span class="h1">Format:</span><br>'
+            + '<span class="h2">1. Question text here?</span><br>'
+            + '<span class="h2">a) Option A &nbsp; b) Option B &nbsp; c) Option C &nbsp; d) Option D</span><br>'
+            + '<span class="h2">Answer: a</span><br><br>'
+            + 'Paste exactly 20 questions for this set.'
+            + '</div>'
+            + '<p class="panel-count" id="cnt_' + ch.id + '_' + s + '">Saved: <b>' + saved.length + ' question(s)</b></p>'
+            + '<textarea class="mcq-ta" id="ta_' + ch.id + '_' + s + '" placeholder="' + taPlaceholder + '"></textarea>'
+            + '<div class="edit-actions">'
+            + '<button class="btn-save" onclick="saveSet(' + ch.id + ',' + s + ')">&#128190; Save Set ' + s + '</button>'
+            + '<button class="btn-clr-ch" onclick="clearSet(' + ch.id + ',' + s + ')">Clear</button>'
+            + '<span class="save-msg" id="msg_' + ch.id + '_' + s + '"></span>'
+            + '</div></div>';
+        }
+        setTabsHtml += '</div>';
+        panel.innerHTML = setTabsHtml + setPanelsHtml;
+        panels.appendChild(panel);
+      });
+    }
+
+    function switchChTab(chId) {
+      document.querySelectorAll('.edit-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.edit-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab_' + chId).classList.add('active');
+      document.getElementById('panel_' + chId).classList.add('active');
+    }
+
+    function switchSetTab(chId, setNum) {
+      // Deactivate bulk tab/panel
+      document.getElementById('stab_' + chId + '_bulk').classList.remove('active');
+      document.getElementById('spanel_' + chId + '_bulk').classList.remove('active');
+      // Deactivate all set tabs/panels
+      for (let s = 1; s <= SETS_PER_CHAPTER; s++) {
+        document.getElementById('stab_' + chId + '_' + s).classList.remove('active');
+        document.getElementById('spanel_' + chId + '_' + s).classList.remove('active');
+      }
+      // Activate selected
+      document.getElementById('stab_' + chId + '_' + setNum).classList.add('active');
+      document.getElementById('spanel_' + chId + '_' + setNum).classList.add('active');
+    }
+
+    // ── BULK UPLOAD LOGIC (JSON) ─────────────────────────────────────────
+    // ── INJECT JS LOGIC ─────────────────────────────────────────
+    function injectFromJS(chId) {
+      const msg = document.getElementById('inject_msg_' + chId);
+      let all = window['CNMCQS_' + chId];
+
+      if (!all) {
+        showMsg(msg, '❌ Variable window.CNMCQS_' + chId + ' not found in the JS file.', 'er');
+        return;
+      }
+
+      if (typeof all === 'string') {
+        all = parseMCQs(all); // Support raw text format just in case
+      }
+
+      if (!Array.isArray(all) || !all.length) {
+        showMsg(msg, '❌ No valid questions found in CNMCQS_' + chId + '.', 'er');
+        return;
+      }
+
+      let savedSets = 0;
+      for (let s = 1; s <= SETS_PER_CHAPTER; s++) {
+        const start = (s - 1) * QS_PER_SET;
+        const slice = all.slice(start, start + QS_PER_SET);
+        if (!slice.length) break;
+
+        saveSetMCQs(chId, s, slice);
+        savedSets++;
+
+        const stab = document.getElementById('stab_' + chId + '_' + s);
+        if (stab) {
+          stab.classList.add('filled');
+          stab.textContent = 'Set ' + s + ' \u2713';
+        }
+        const cnt = document.getElementById('cnt_' + chId + '_' + s);
+        if (cnt) cnt.innerHTML = 'Saved: <b>' + slice.length + ' question(s)</b>';
+      }
+
+      showMsg(msg, '✅ ' + all.length + ' questions auto-split into ' + savedSets + ' sets and injected!', 'ok');
+      renderCards();
+    }
+
+    function clearChapterSets(chId) {
+      if (!confirm(`Delete all saved MCQs for Chapter ${chId} (All 5 Sets)?`)) return;
+      for (let s = 1; s <= SETS_PER_CHAPTER; s++) {
+        localStorage.removeItem(`mcq_${chId}_${s}`);
+        const ta = document.getElementById(`ta_${chId}_${s}`);
+        if (ta) ta.value = '';
+        const cnt = document.getElementById(`cnt_${chId}_${s}`);
+        if (cnt) cnt.innerHTML = `Saved: <b>0 question(s)</b>`;
+        const msg = document.getElementById(`msg_${chId}_${s}`);
+        if (msg) msg.textContent = '';
+        const stab = document.getElementById(`stab_${chId}_${s}`);
+        if (stab) {
+          stab.classList.remove('filled');
+          stab.textContent = `Set ${s}`;
+        }
+      }
+      const bulkMsg = document.getElementById(`bulk_msg_${chId}`);
+      if (bulkMsg) showMsg(bulkMsg, '🗑 All 5 sets cleared!', 'ok');
+      renderCards();
+    }
+
+    function saveSet(chId, setNum) {
+      const ta = document.getElementById(`ta_${chId}_${setNum}`);
+      const msg = document.getElementById(`msg_${chId}_${setNum}`);
+      const text = ta.value.trim();
+      if (!text) { showMsg(msg, '⚠️ Nothing pasted yet.', 'er'); return; }
+      const parsed = parseMCQs(text);
+      if (!parsed.length) {
+        ta.classList.add('err');
+        showMsg(msg, '❌ No questions detected. Check the format.', 'er');
+        setTimeout(() => ta.classList.remove('err'), 2500);
+        return;
+      }
+      ta.classList.remove('err');
+      saveSetMCQs(chId, setNum, parsed);
+      // Update count + tab indicator
+      document.getElementById(`cnt_${chId}_${setNum}`).innerHTML = `Saved: <b>${parsed.length} question(s)</b>`;
+      const stab = document.getElementById(`stab_${chId}_${setNum}`);
+      stab.classList.add('filled');
+      stab.textContent = `Set ${setNum} ✓`;
+      showMsg(msg, `✅ ${parsed.length} questions saved!`, 'ok');
+      renderCards();
+    }
+
+    function clearSet(chId, setNum) {
+      if (!confirm(`Delete all MCQs for Chapter ${chId} — Set ${setNum}?`)) return;
+      localStorage.removeItem(`mcq_${chId}_${setNum}`);
+      document.getElementById(`ta_${chId}_${setNum}`).value = '';
+      document.getElementById(`cnt_${chId}_${setNum}`).innerHTML = `Saved: <b>0 question(s)</b>`;
+      document.getElementById(`msg_${chId}_${setNum}`).textContent = '';
+      const stab = document.getElementById(`stab_${chId}_${setNum}`);
+      stab.classList.remove('filled');
+      stab.textContent = `Set ${setNum}`;
+      renderCards();
+    }
+
+    function showMsg(el, text, type) {
+      el.textContent = text; el.className = `save-msg ${type}`;
+      setTimeout(() => { el.textContent = ''; el.className = 'save-msg'; }, 3500);
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  CHAPTER CARDS
+    // ══════════════════════════════════════════════════════════════
+    function renderCards() {
+      renderMiniHeroCards();
+      renderHeroGraph();
+      const grid = document.getElementById('chaptersGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      CHAPTERS.forEach(ch => {
+        const totalQs = countChapterQs(ch.id);
+        // Count filled sets
+        let filledSets = 0;
+        for (let s = 1; s <= SETS_PER_CHAPTER; s++) if (loadSetMCQs(ch.id, s).length > 0) filledSets++;
+        const hist = getChHist(ch.id);
+        const best = hist.length ? Math.max(...hist.map(r => r.percent)) : null;
+        const card = document.createElement('div');
+        card.className = 'chapter-card';
+        card.onclick = () => openSetPicker(ch);
+        const qb = totalQs > 0
+          ? `<span class="badge has-q">${filledSets}/5 Sets • ${totalQs} Q</span>`
+          : `<span class="badge no-q">⚠ No questions yet</span>`;
+        const bb = best !== null ? `<span class="badge done">Best: ${best}%</span>` : '';
+        card.innerHTML = `
+      <div class="chapter-num">CHAPTER ${String(ch.id).padStart(2, '0')}</div>
+      <div class="chapter-name">${ch.name}</div>
+      <div class="chapter-desc">${ch.desc}</div>
+      <div class="badges">${qb}${bb}</div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  HERO LOGIC
+    // ══════════════════════════════════════════════════════════════
+    function renderMiniHeroCards() {
+      const grid = document.getElementById('heroChaptersGrid');
+      if (grid) {
+        grid.innerHTML = '';
+        const icons = ['📖', '⚡', '🎯', '⚙️', '🌐'];
+        CHAPTERS.forEach((ch, idx) => {
+          const totalQs = countChapterQs(ch.id);
+          const icon = icons[idx % icons.length];
+          const hist = getChHist(ch.id);
+          const best = hist.length ? Math.max(...hist.map(r => r.percent)) : null;
+          const subText = best !== null ? `Best: ${best}%` : `${totalQs} Qs`;
+
+          const card = document.createElement('div');
+          card.className = 'mini-chapter-card';
+          card.onclick = () => openSetPicker(ch);
+          card.innerHTML = `
+            <div class="mini-icon">${icon}</div>
+            <div class="mini-info">
+              <div class="mini-title">${ch.name}</div>
+              <div class="mini-sub">${subText}</div>
+            </div>`;
+          grid.appendChild(card);
+        });
+      }
+    }
+
+    let heroChartInstance = null;
+    function renderHeroGraph() {
+      const emptyMsg = document.getElementById('heroGraphEmpty');
+      const canvasWrap = document.getElementById('heroGraphCanvasWrap');
+      const canvas = document.getElementById('heroTrendChart');
+      if (!canvas) return;
+
+      const hist = getAllHist();
+      if (!hist.length) {
+        if (emptyMsg) emptyMsg.style.display = 'flex';
+        if (canvasWrap) canvasWrap.style.display = 'none';
+        return;
+      }
+
+      if (emptyMsg) emptyMsg.style.display = 'none';
+      if (canvasWrap) canvasWrap.style.display = 'flex';
+
+      const recentHist = hist.slice(-10);
+      if (heroChartInstance) { heroChartInstance.destroy(); }
+
+      if (window.Chart) {
+        Chart.defaults.color = '#888';
+        const ctx = canvas.getContext('2d');
+        heroChartInstance = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: recentHist.map((_, i) => `A${i + 1}`),
+            datasets: [{
+              label: 'Accuracy (%)',
+              data: recentHist.map(r => r.percent),
+              borderColor: '#34d399',
+              backgroundColor: 'rgba(52, 211, 153, 0.1)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.3,
+              pointBackgroundColor: '#06080f',
+              pointBorderColor: '#34d399',
+              pointBorderWidth: 2,
+              pointRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+      }
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  SET PICKER
+    // ══════════════════════════════════════════════════════════════
+    let curChapter = null, curSetNum = null;
+
+    function openSetPicker(ch) {
+      curChapter = ch;
+      document.getElementById('pickerChapterLabel').textContent = ch.name;
+      document.getElementById('pickerTitle').textContent = ch.name;
+      const grid = document.getElementById('setsGrid');
+      grid.innerHTML = '';
+
+      for (let s = 1; s <= SETS_PER_CHAPTER; s++) {
+        const qs = loadSetMCQs(ch.id, s);
+        const hist = getSetHist(ch.id, s);
+        const best = hist.length ? Math.max(...hist.map(r => r.percent)) : null;
+        const card = document.createElement('div');
+        card.className = 'set-card' + (qs.length === 0 ? ' locked' : '');
+        card.onclick = () => startSet(ch, s);
+        const badgeHtml = qs.length > 0
+          ? `<span class="badge has-q">${qs.length} Questions</span>`
+          : `<span class="badge no-q">⚠ No questions</span>`;
+        const bestHtml = best !== null ? `<span class="badge done">Best: ${best}%</span>` : '';
+        card.innerHTML = `
+      <div class="set-num">SET ${String(s).padStart(2, '0')}</div>
+      <div class="set-name">Set ${s}</div>
+      <div class="set-info">${qs.length > 0 ? qs.length + ' questions' : 'Not filled yet'}</div>
+      <div class="badges">${badgeHtml}${bestHtml}</div>`;
+        grid.appendChild(card);
+      }
+      showPage('set-picker-page');
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  QUIZ — ALL 20 QUESTIONS SHOWN VERTICALLY
+    // ══════════════════════════════════════════════════════════════
+    let questions = [], answers = [];
+    let setStartTime = 0;
+
+    function startSet(ch, setNum) {
+      const qs = loadSetMCQs(ch.id, setNum);
+      if (!qs.length) {
+        alert(`No questions in ${ch.name} — Set ${setNum}.\n\nPaste MCQs in the editor and click Save.`);
+        return;
+      }
+      curChapter = ch;
+      curSetNum = setNum;
+      questions = qs;
+      answers = new Array(qs.length).fill(null);
+      setStartTime = Date.now();
+
+      document.getElementById('quizChapterLabel').textContent = ch.name;
+      document.getElementById('quizSetLabel').textContent = `Set ${setNum}`;
+      document.getElementById('quizQCount').textContent = `${qs.length} Questions`;
+      document.getElementById('setLabel').textContent = `SET ${setNum} — ${ch.name.toUpperCase()}`;
+      document.getElementById('progressBar').style.width = '0%';
+
+      renderAllQuestions();
+      showPage('quiz-page');
+      window.scrollTo(0, 0);
+    }
+
+    function renderAllQuestions() {
+      const container = document.getElementById('questionsContainer');
+      container.innerHTML = '';
+      const L = ['A', 'B', 'C', 'D'];
+
+      questions.forEach((q, qi) => {
+        const block = document.createElement('div');
+        block.className = 'q-block' + (answers[qi] !== null ? ' answered' : '');
+        block.id = `qblock_${qi}`;
+
+        const optsHtml = q.options.map((opt, oi) => {
+          const sel = answers[qi] === oi ? ' selected' : '';
+          return `<button class="opt-btn${sel}" onclick="selectOpt(${qi},${oi})">
+        <span class="opt-lbl">${L[oi]}</span><span>${opt}</span>
+      </button>`;
+        }).join('');
+
+        block.innerHTML = `
+      <div class="q-meta">Q ${String(qi + 1).padStart(2, '0')} / ${questions.length}</div>
+      <div class="q-text">${q.question}</div>
+      <div class="opts-list" id="opts_${qi}">${optsHtml}</div>`;
+        container.appendChild(block);
+      });
+      updateAnsweredCount();
+    }
+
+    function selectOpt(qi, oi) {
+      answers[qi] = oi;
+      // Re-render just this question's options (fast, no full re-render)
+      const L = ['A', 'B', 'C', 'D'];
+      const optsDiv = document.getElementById(`opts_${qi}`);
+      optsDiv.querySelectorAll('.opt-btn').forEach((btn, i) => {
+        btn.className = 'opt-btn' + (i === oi ? ' selected' : '');
+      });
+      document.getElementById(`qblock_${qi}`).classList.add('answered');
+      updateAnsweredCount();
+    }
+
+    function updateAnsweredCount() {
+      const done = answers.filter(a => a !== null).length;
+      document.getElementById('answeredCount').innerHTML = `<b>${done}</b> / ${questions.length} answered`;
+      document.getElementById('progressBar').style.width = (done / questions.length * 100) + '%';
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  SUBMIT SET
+    // ══════════════════════════════════════════════════════════════
+    function submitSet() {
+      const unanswered = answers.filter(a => a === null).length;
+      if (unanswered && !confirm(`${unanswered} question(s) unanswered. Submit anyway?`)) return;
+      showResult();
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  RESULT
+    // ══════════════════════════════════════════════════════════════
+    function showResult() {
+      let correct = 0, wrong = 0, skipped = 0;
+      const mistakes = [];
+      questions.forEach((q, i) => {
+        if (answers[i] === null) skipped++;
+        else if (answers[i] === q.answer) correct++;
+        else { wrong++; mistakes.push(i); }
+      });
+      const total = questions.length;
+      const pct = Math.round((correct / total) * 100);
+      const timeTaken = Math.max(1, Math.round((Date.now() - setStartTime) / 1000));
+
+      document.getElementById('rEmoji').textContent = pct >= 80 ? '🏆' : pct >= 60 ? '🎉' : pct >= 40 ? '💪' : '😔';
+      document.getElementById('rTitle').textContent = pct >= 60 ? 'Great Job!' : 'Keep Practicing!';
+      document.getElementById('rSub').textContent = `${curChapter.name.toUpperCase()} — SET ${curSetNum}`;
+      document.getElementById('rScore').textContent = correct;
+      document.getElementById('rTotal').textContent = '/' + total;
+      document.getElementById('rCorrect').textContent = correct;
+      document.getElementById('rWrong').textContent = wrong;
+      document.getElementById('rSkipped').textContent = skipped;
+
+      setTimeout(() => {
+        const c = document.getElementById('scoreCircle');
+        c.style.transition = 'stroke-dashoffset 1.2s ease';
+        c.style.strokeDashoffset = 314 - (pct / 100) * 314;
+      }, 200);
+
+      showPage('result-page');
+
+      const rec = {
+        date: new Date().toLocaleString('en-IN'),
+        chapterId: curChapter.id,
+        chapterName: curChapter.name,
+        setNum: curSetNum,
+        score: correct, total, wrong, skipped, percent: pct,
+        timeTaken: timeTaken,
+        mistakes: mistakes
+      };
+      saveHist(rec);
+      sendToSheets(rec);
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  REVIEW
+    // ══════════════════════════════════════════════════════════════
+    function reviewAnswers() {
+      const body = document.getElementById('reviewBody');
+      body.innerHTML = '';
+      const L = ['A', 'B', 'C', 'D'];
+      questions.forEach((q, i) => {
+        const ua = answers[i], ca = q.answer;
+        const cls = ua === null ? 'r-skipped' : ua === ca ? 'r-correct' : 'r-wrong';
+        const item = document.createElement('div');
+        item.className = `review-item ${cls}`;
+        const opts = q.options.map((o, oi) => {
+          let c = oi === ca ? 'correct-ans' : (oi === ua && ua !== ca ? 'wrong-ans' : '');
+          return `<div class="review-opt ${c}">${L[oi]}) ${o}${oi === ca ? ' ✓ Correct answer' : ''}${oi === ua && ua !== ca ? ' ✗ Your answer' : ''}</div>`;
+        }).join('');
+        item.innerHTML = `<div class="review-q">${i + 1}. ${q.question}</div><div class="review-opts">${opts}</div>`;
+        body.appendChild(item);
+      });
+      showPage('review-page');
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  HISTORY
+    // ══════════════════════════════════════════════════════════════
+    function saveHist(r) {
+      const h = JSON.parse(localStorage.getItem('quizHist') || '[]');
+      h.push(r);
+      localStorage.setItem('quizHist', JSON.stringify(h));
+    }
+    function getAllHist() { return JSON.parse(localStorage.getItem('quizHist') || '[]'); }
+    function getChHist(chId) { return getAllHist().filter(r => r.chapterId === chId); }
+    function getSetHist(chId, setNum) { return getAllHist().filter(r => r.chapterId === chId && r.setNum === setNum); }
+    function clearAllData() {
+      if (!confirm('Delete all quiz history? This cannot be undone.')) return;
+      localStorage.removeItem('quizHist');
+      renderCards();
+      showDashboard();
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  GOOGLE SHEETS
+    // ══════════════════════════════════════════════════════════════
+    function getSubjectName() { return localStorage.getItem('subjectName') || 'Quiz Results'; }
+    function previewSubject() {
+      const val = document.getElementById('subjectName').value.trim();
+      document.getElementById('subjectPreview').innerHTML = val
+        ? `<span class="subject-badge">→ Sheet tab: "${val}"</span>` : '';
+    }
+    function saveSheetUrl() {
+      const url = document.getElementById('sheetsUrl').value.trim();
+      const subject = document.getElementById('subjectName').value.trim();
+      if (!url) { alert('Please enter the Google Apps Script URL.'); return; }
+      if (!subject) { alert('Please enter a Subject Name.'); return; }
+      localStorage.setItem('sheetsUrl', url);
+      localStorage.setItem('subjectName', subject);
+      alert(`✅ Settings saved!\nSubject: "${subject}"\nResults → "${subject}" tab in Google Sheet.`);
+      previewSubject();
+    }
+    function sendToSheets(rec) {
+      const url = localStorage.getItem('sheetsUrl');
+      const el = document.getElementById('syncStatus');
+      if (!url) { el.textContent = ''; return; }
+      rec.subject = getSubjectName();
+      el.textContent = `⏳ Syncing to "${rec.subject}" sheet...`; el.style.color = 'var(--text-muted)';
+      fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(rec) })
+        .then(() => { el.textContent = `✅ Saved to "${rec.subject}" sheet!`; el.style.color = 'var(--accent3)'; })
+        .catch(() => { el.textContent = '❌ Sync failed — result saved locally.'; el.style.color = 'var(--wrong)'; });
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  DASHBOARD
+    // ══════════════════════════════════════════════════════════════
+    function showDashboard() {
+      const hist = getAllHist();
+      const body = document.getElementById('dashboardBody');
+      if (!hist.length) {
+        body.innerHTML = '<div class="no-data">No attempts recorded yet.<br>Complete a set to see your performance here.</div>';
+        showPage('dashboard-page'); return;
+      }
+
+      // Calculate derived metrics
+      const totalQs = hist.reduce((a, r) => a + r.total, 0);
+      const totalCorrect = hist.reduce((a, r) => a + r.score, 0);
+      const overallAcc = totalQs ? Math.round((totalCorrect / totalQs) * 100) : 0;
+
+      // Consistency (Std Dev over last 10 attempts)
+      const recentHist = hist.slice(-10);
+      const recentAccAvg = recentHist.reduce((a, r) => a + r.percent, 0) / (recentHist.length || 1);
+      const variance = recentHist.reduce((a, r) => a + Math.pow(r.percent - recentAccAvg, 2), 0) / (recentHist.length || 1);
+      const stdDev = Math.sqrt(variance);
+      const consistency = Math.max(0, Math.round(100 - stdDev));
+
+      // Time tracking
+      let validTimeHist = hist.filter(r => r.timeTaken);
+      const totalTime = validTimeHist.reduce((a, r) => a + r.timeTaken, 0);
+      const totalTimeQs = validTimeHist.reduce((a, r) => a + r.total, 0);
+      const avgTimePerQ = totalTimeQs ? (totalTime / totalTimeQs).toFixed(1) : '-';
+
+      // Mistake Tracking
+      let totalMistakes = 0;
+      let repeatedMistakes = 0;
+      const mistakeMap = {};
+      hist.forEach(r => {
+        if (r.mistakes) {
+          totalMistakes += r.mistakes.length;
+          r.mistakes.forEach(mIdx => {
+            const key = `${r.chapterId}_${r.setNum}_${mIdx}`;
+            if (mistakeMap[key]) {
+              repeatedMistakes++;
+              mistakeMap[key]++;
+            } else {
+              mistakeMap[key] = 1;
+            }
+          });
+        }
+      });
+      const mistakeRepeatRate = totalMistakes > 0 ? Math.round((repeatedMistakes / totalMistakes) * 100) : 0;
+
+      // Exam Readiness
+      let speedScore = avgTimePerQ !== '-' ? Math.max(0, 100 - (avgTimePerQ / 1)) : 80;
+      let readiness = Math.round((overallAcc * 0.5) + (consistency * 0.25) + ((100 - mistakeRepeatRate) * 0.15) + (speedScore * 0.1));
+      readiness = Math.min(100, Math.max(0, readiness));
+
+      // Daily Activity & Consistency Tracker
+      const dailyActivity = {};
+      hist.forEach(r => {
+        try {
+          const parts = r.date.split(',')[0].trim().split('/');
+          if (parts.length === 3) {
+            const d = parts[0].padStart(2, '0');
+            const m = parts[1].padStart(2, '0');
+            const y = parts[2];
+            const iso = `${y}-${m}-${d}`;
+            if (!dailyActivity[iso]) dailyActivity[iso] = { attempted: 0, correct: 0 };
+            dailyActivity[iso].attempted += r.total;
+            dailyActivity[iso].correct += r.score;
+          }
+        } catch (e) { }
+      });
+
+      const today = new Date();
+      let currentStreak = 0;
+      let checkDate = new Date(today);
+      const hasAct = (dt) => {
+        const iso = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+        return !!dailyActivity[iso];
+      };
+      if (!hasAct(checkDate)) {
+        let yesterday = new Date(checkDate);
+        yesterday.setDate(yesterday.getDate() - 1);
+        if (hasAct(yesterday)) checkDate = yesterday;
+      }
+      while (hasAct(checkDate)) {
+        currentStreak++;
+        checkDate.setDate(checkDate.getDate() - 1);
+      }
+
+      const allIsos = Object.keys(dailyActivity).sort();
+      let longestStreak = 0;
+      let tempStreak = 0;
+      let lastDate = null;
+      allIsos.forEach(iso => {
+        const curD = new Date(iso);
+        if (!lastDate) { tempStreak = 1; }
+        else {
+          const diff = Math.round((curD - lastDate) / (1000 * 60 * 60 * 24));
+          if (diff === 1) tempStreak++;
+          else tempStreak = 1;
+        }
+        if (tempStreak > longestStreak) longestStreak = tempStreak;
+        lastDate = curD;
+      });
+
+      const startDate = new Date(today);
+      startDate.setDate(today.getDate() - 89);
+      const startDayOfWeek = startDate.getDay();
+
+      let activeDays = 0;
+      let calStr = `<div class="cal-grid">`;
+      for (let i = 0; i < startDayOfWeek; i++) {
+        calStr += `<div class="cal-box" style="visibility:hidden"></div>`;
+      }
+      for (let i = 0; i < 90; i++) {
+        const d = new Date(startDate); d.setDate(startDate.getDate() + i);
+        const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const act = dailyActivity[iso];
+        let lvl = 0;
+        let tooltip = `${iso}: No activity`;
+        if (act) {
+          activeDays++;
+          if (act.attempted > 30) lvl = 3;
+          else if (act.attempted >= 10) lvl = 2;
+          else if (act.attempted > 0) lvl = 1;
+          tooltip = `${iso}: ${act.attempted} Qs attempted (${act.correct} correct)`;
+        }
+        calStr += `<div class="cal-box lvl-${lvl}" title="${tooltip}"></div>`;
+      }
+      calStr += `</div>`;
+
+      const calInsights = currentStreak >= 3 ? 'You are consistent this week 🔥'
+        : (activeDays === 0 ? 'Start practicing today to build your streak!'
+          : 'You missed some days, try to maintain a streak!');
+
+      const calendarHtml = `
+      <div class="dash-section" style="margin-top: 32px;">Consistency Tracker</div>
+      <div class="cal-wrap">
+        <div class="cal-header">
+           <div class="cal-title">${calInsights}</div>
+           <div class="cal-stats">
+              <div class="cal-stat">🔥 Streak: <b>${currentStreak} days</b></div>
+              <div class="cal-stat">🏆 Longest: <b>${longestStreak} days</b></div>
+              <div class="cal-stat">📅 Active: <b>${activeDays}</b></div>
+              <div class="cal-stat">Score: <b>${Math.round((activeDays / 90) * 100)}%</b></div>
+           </div>
+        </div>
+        ${calStr}
+        <div class="cal-legend">
+           Less <div class="cal-box lvl-0"></div><div class="cal-box lvl-1"></div><div class="cal-box lvl-2"></div><div class="cal-box lvl-3"></div> More
+        </div>
+      </div>
+      `;
+
+      // Heatmap Data (Chapter vs Set)
+      const heatData = {};
+      hist.forEach(r => {
+        if (!heatData[r.chapterId]) heatData[r.chapterId] = {};
+        if (!heatData[r.chapterId][r.setNum]) heatData[r.chapterId][r.setNum] = { score: 0, total: 0 };
+        heatData[r.chapterId][r.setNum].score += r.score;
+        heatData[r.chapterId][r.setNum].total += r.total;
+      });
+
+      // Find Focus
+      let weakestChapterName = "None", weakestChapterAcc = 101, weakestChapterId = null;
+      let weakestSetIdentifier = "None", weakestSetAcc = 101, weakestSetChName = "";
+
+      let chaptersStats = {};
+      hist.forEach(r => {
+        if (!chaptersStats[r.chapterId]) chaptersStats[r.chapterId] = { name: r.chapterName, score: 0, total: 0 };
+        chaptersStats[r.chapterId].score += r.score;
+        chaptersStats[r.chapterId].total += r.total;
+      });
+
+      Object.keys(chaptersStats).forEach(ch => {
+        let sc = chaptersStats[ch];
+        let acc = (sc.score / sc.total) * 100;
+        if (acc < weakestChapterAcc) { weakestChapterAcc = acc; weakestChapterName = sc.name; weakestChapterId = ch; }
+      });
+
+      let slowestSetTime = 0; let slowestSetName = "None";
+      Object.keys(heatData).forEach(chId => {
+        Object.keys(heatData[chId]).forEach(setNum => {
+          let d = heatData[chId][setNum];
+          let acc = (d.score / d.total) * 100;
+          if (acc < weakestSetAcc) { weakestSetAcc = acc; weakestSetIdentifier = setNum; weakestSetChName = chaptersStats[chId].name; }
+        });
+      });
+
+      validTimeHist.forEach(r => {
+        let timePerQ = r.timeTaken / r.total;
+        if (timePerQ > slowestSetTime) { slowestSetTime = timePerQ; slowestSetName = `${r.chapterName} - Set ${r.setNum}`; }
+      });
+
+      // HTML Builds
+      const focusHtml = `
+      <div class="dash-insights" style="border-left: 4px solid var(--accent); position: relative; overflow: hidden;">
+        <div style="position:absolute; top:-20px; right: -20px; font-size:6rem; opacity:0.04;">🎯</div>
+        <h3 style="color:var(--accent); font-family:var(--font-head); margin-bottom:12px; font-size:1.2rem; align-items:center; display:flex; gap:8px;">
+          🎯 Today's Focus Panel
+        </h3>
+        <p style="margin-bottom:8px; font-size:0.95rem;"><b>Main Goal:</b> You should focus on <b>${weakestChapterName}</b>. Your accuracy is ${Math.round(weakestChapterAcc)}%.</p>
+        <div style="display:flex; flex-wrap:wrap; gap:16px; margin-top:16px;">
+           <div class="stat-pill"><b>Weakest Section:</b> ${weakestSetChName} (Set ${weakestSetIdentifier})</div>
+           <div class="stat-pill"><b>Time Issue:</b> ${slowestSetName !== 'None' ? slowestSetName + ' (' + slowestSetTime.toFixed(1) + 's per Q)' : 'No current issues'}</div>
+           <div class="stat-pill" style="color:var(--wrong);"><b>Repeated Mistakes:</b> ${repeatedMistakes} issues</div>
+        </div>
+      </div>
+      `;
+
+      const readinessColor = readiness >= 75 ? 'var(--correct)' : (readiness >= 50 ? '#fbbf24' : 'var(--wrong)');
+      const readinessHtml = `
+      <div style="margin-bottom: 24px; display:flex; align-items:center; padding: 20px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); gap:20px;">
+         <div style="font-family:var(--font-head); font-size: 3rem; font-weight:800; color:${readinessColor}; line-height:1;">
+           ${readiness}%
+         </div>
+         <div>
+           <h4 style="font-family:var(--font-head); font-size: 1.1rem; color:var(--text); margin-bottom:4px;">Exam Readiness Index</h4>
+           <div style="color:var(--text-muted); font-size: 0.85rem;">Calculated using Consistency (${consistency}/100), Speed (${avgTimePerQ}s), and Mistake Reduction rates.</div>
+         </div>
+      </div>
+      `;
+
+      const summaryCardsHtml = `
+      <div class="dash-grid" style="grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));">
+        <div class="dash-card"><div class="dash-lbl">Accuracy %</div><div class="dash-val ${overallAcc >= 60 ? 'c-g' : 'c-r'}">${overallAcc}%</div></div>
+        <div class="dash-card"><div class="dash-lbl">Consistency</div><div class="dash-val c-a">${consistency}</div></div>
+        <div class="dash-card"><div class="dash-lbl">Mistake Repeat</div><div class="dash-val c-r">${mistakeRepeatRate}%</div></div>
+        <div class="dash-card"><div class="dash-lbl">Avg Time/Q</div><div class="dash-val">${avgTimePerQ}s</div></div>
+      </div>
+      `;
+
+      let heatmapHtml = `<div class="dash-section" style="margin-top: 32px;">Chapter & Section Heatmap</div><div class="heatmap-grid" style="margin-bottom:32px;">
+      <div></div><div style="font-size:0.7rem;text-align:center;">S1</div><div style="font-size:0.7rem;text-align:center;">S2</div><div style="font-size:0.7rem;text-align:center;">S3</div><div style="font-size:0.7rem;text-align:center;">S4</div><div style="font-size:0.7rem;text-align:center;">S5</div>
+      `;
+      CHAPTERS.forEach(ch => {
+        heatmapHtml += `<div style="display:flex; align-items:center; font-family:var(--font-mono); font-size:0.75rem; color:var(--accent3);">${ch.name}</div>`;
+        let cData = heatData[ch.id] || {};
+        for (let s = 1; s <= SETS_PER_CHAPTER; s++) {
+          if (cData[s]) {
+            let sacc = Math.round((cData[s].score / cData[s].total) * 100);
+            let cl = sacc >= 80 ? 'bg-g' : sacc >= 50 ? 'bg-y' : 'bg-r';
+            heatmapHtml += `<div class="heat-box ${cl}" title="Set ${s}: ${sacc}%"></div>`;
+          } else {
+            heatmapHtml += `<div class="heat-box bg-none" title="Set ${s}: Not Attempted"></div>`;
+          }
+        }
+      });
+      heatmapHtml += `</div>`;
+
+      const actionHtml = `
+      <div class="dash-section" style="margin-top: 32px;">Action Panel</div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom: 24px;">
+        <button class="btn-review" onclick="openSetPicker(CHAPTERS.find(c => c.id == ${weakestChapterId || 1}))">📖 Revise Weak Chapter</button>
+        <button class="btn-retry" onclick="alert('Proceed to ${weakestSetChName} Set ${weakestSetIdentifier}')">🎯 Practice Weak Section</button>
+        <button class="btn-sets" ${totalMistakes === 0 ? 'disabled' : ''} onclick="alert('Feature coming soon: Dynamic test generator.')">❌ Retry ${repeatedMistakes} Mistakes</button>
+      </div>
+      `;
+
+      body.innerHTML = focusHtml + readinessHtml + summaryCardsHtml + calendarHtml + heatmapHtml + `
+    <div class="dash-charts">
+      <div class="chart-card full-width">
+        <h4>Accuracy Trend (Last 10 Attempts)</h4>
+        <canvas id="trendChart" height="80"></canvas>
+      </div>
+      <div class="chart-card">
+        <h4>Speed vs Accuracy</h4>
+        <canvas id="speedChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h4>Chapter Performance</h4>
+        <canvas id="chapterChart"></canvas>
+      </div>
+    </div>
+` + actionHtml;
+
+      showPage('dashboard-page');
+
+      if (window.Chart) {
+        Chart.defaults.color = '#888';
+        Chart.defaults.font.family = "'Outfit', sans-serif";
+
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        new Chart(trendCtx, {
+          type: 'line',
+          data: {
+            labels: recentHist.map((_, i) => `A${i + 1}`),
+            datasets: [{
+              label: 'Accuracy (%)',
+              data: recentHist.map(r => r.percent),
+              borderColor: '#7c6aff',
+              backgroundColor: 'rgba(124, 106, 255, 0.1)',
+              borderWidth: 2,
+              tension: 0.3,
+              fill: true
+            }]
+          },
+          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
+        });
+
+        let speedDataPoints = validTimeHist.map(r => {
+          return { x: r.timeTaken / r.total, y: r.percent, r: 5 };
+        });
+        const speedCtx = document.getElementById('speedChart').getContext('2d');
+        new Chart(speedCtx, {
+          type: 'scatter',
+          data: {
+            datasets: [{
+              label: 'Attempt',
+              data: speedDataPoints,
+              backgroundColor: 'rgba(106, 255, 212, 0.7)'
+            }]
+          },
+          options: {
+            responsive: true, plugins: { legend: { display: false } },
+            scales: {
+              x: { title: { display: true, text: 'Seconds per Question' }, beginAtZero: true },
+              y: { title: { display: true, text: 'Accuracy %' }, beginAtZero: true, max: 100 }
+            }
+          }
+        });
+
+        const chapLabels = Object.keys(chaptersStats).map(id => chaptersStats[id].name);
+        const chapData = Object.keys(chaptersStats).map(id => (chaptersStats[id].score / chaptersStats[id].total) * 100);
+        const chapCtx = document.getElementById('chapterChart').getContext('2d');
+        new Chart(chapCtx, {
+          type: 'bar',
+          data: {
+            labels: chapLabels,
+            datasets: [{
+              label: 'Accuracy %',
+              data: chapData,
+              backgroundColor: chapData.map(v => v >= 70 ? 'rgba(74, 222, 128, 0.7)' : (v >= 40 ? 'rgba(251, 191, 36, 0.7)' : 'rgba(248, 113, 113, 0.7)')),
+              borderRadius: 6
+            }]
+          },
+          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
+        });
+      }
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  NAVIGATION
+    // ══════════════════════════════════════════════════════════════
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+    function goHome() { renderCards(); showPage('landing-page'); }
+    function backToSets() { openSetPicker(curChapter); }
+    function retrySet() { startSet(curChapter, curSetNum); }
+
+    // ══════════════════════════════════════════════════════════════
+    //  INIT
+    // ══════════════════════════════════════════════════════════════
+    window.addEventListener('DOMContentLoaded', () => {
+      const u = localStorage.getItem('sheetsUrl');
+      if (u) document.getElementById('sheetsUrl').value = u;
+      const s = localStorage.getItem('subjectName');
+      if (s) { document.getElementById('subjectName').value = s; previewSubject(); }
+      buildEditor();
+      renderCards();
+    });
+  </script>
+</body>
+
+</html>

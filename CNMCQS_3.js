@@ -1,0 +1,122 @@
+window.CNMCQS_3 = [
+  { question: "What is the main function of Network Layer?", options: ["Framing", "Routing", "Encoding", "Encryption"], answer: 1 },
+  { question: "Network layer works with?", options: ["Frames", "Packets", "Bits", "Segments"], answer: 1 },
+  { question: "Which device works at Network Layer?", options: ["Router", "Switch", "Hub", "Repeater"], answer: 0 },
+  { question: "Routing means?", options: ["Path selection", "Data deletion", "Encoding", "Switching"], answer: 0 },
+  { question: "Which address is used at Network Layer?", options: ["MAC", "IP", "Port", "URL"], answer: 1 },
+
+  { question: "IP address is?", options: ["Logical", "Physical", "Temporary", "Dynamic"], answer: 0 },
+  { question: "Which protocol works at Network Layer?", options: ["IP", "TCP", "HTTP", "FTP"], answer: 0 },
+  { question: "Which protocol is connectionless?", options: ["IP", "TCP", "FTP", "HTTP"], answer: 0 },
+  { question: "Which protocol provides best-effort delivery?", options: ["IP", "TCP", "UDP", "HTTP"], answer: 0 },
+  { question: "ICMP is used for?", options: ["Error reporting", "Routing", "Encryption", "Flow control"], answer: 0 },
+
+  { question: "Ping command uses?", options: ["ICMP", "TCP", "UDP", "HTTP"], answer: 0 },
+  { question: "ARP maps?", options: ["IP to MAC", "MAC to IP", "Name to IP", "IP to Name"], answer: 0 },
+  { question: "RARP maps?", options: ["MAC to IP", "IP to MAC", "Name to IP", "IP to Name"], answer: 0 },
+  { question: "Subnetting is?", options: ["Divide network", "Combine network", "Encrypt", "Switch"], answer: 0 },
+  { question: "IPv4 size?", options: ["32-bit", "64-bit", "128-bit", "16-bit"], answer: 0 },
+
+  { question: "IPv6 size?", options: ["128-bit", "64-bit", "32-bit", "16-bit"], answer: 0 },
+  { question: "Which is private IP?", options: ["192.168.1.1", "8.8.8.8", "1.1.1.1", "9.9.9.9"], answer: 0 },
+  { question: "Which is public IP?", options: ["8.8.8.8", "192.168.1.1", "10.0.0.1", "172.16.0.1"], answer: 0 },
+  { question: "NAT stands for?", options: ["Network Address Translation", "Network Access Table", "Node Address Table", "None"], answer: 0 },
+  { question: "NAT is used for?", options: ["Address translation", "Routing", "Encryption", "Switching"], answer: 0 },
+
+  { question: "Static routing is?", options: ["Manual", "Automatic", "Dynamic", "Adaptive"], answer: 0 },
+  { question: "Dynamic routing is?", options: ["Automatic", "Manual", "Static", "Fixed"], answer: 0 },
+  { question: "Routing algorithm?", options: ["Dijkstra", "Bubble", "Merge", "Quick"], answer: 0 },
+  { question: "Shortest path uses?", options: ["Dijkstra", "Prim", "Kruskal", "DFS"], answer: 0 },
+  { question: "Routing table stores?", options: ["Paths", "Data", "Frames", "Signals"], answer: 0 },
+
+  { question: "Congestion means?", options: ["High traffic", "Low traffic", "No traffic", "Error"], answer: 0 },
+  { question: "TTL stands for?", options: ["Time To Live", "Total Time Limit", "Transfer Time Level", "None"], answer: 0 },
+  { question: "TTL prevents?", options: ["Infinite loop", "Error", "Delay", "Loss"], answer: 0 },
+  { question: "Packet switching is?", options: ["Data in packets", "Dedicated path", "Signal only", "None"], answer: 0 },
+  { question: "Circuit switching is?", options: ["Dedicated path", "Packets", "Frames", "None"], answer: 0 },
+
+  { question: "Which is used in internet?", options: ["Packet switching", "Circuit switching", "Both", "None"], answer: 0 },
+  { question: "IP is?", options: ["Unreliable", "Reliable", "Secure", "Fast"], answer: 0 },
+  { question: "Which ensures delivery?", options: ["TCP", "IP", "UDP", "ICMP"], answer: 0 },
+  { question: "Fragmentation occurs when?", options: ["Packet too large", "Packet small", "Routing fails", "Error"], answer: 0 },
+  { question: "Reassembly occurs at?", options: ["Destination", "Source", "Router", "Switch"], answer: 0 },
+
+  { question: "Which layer fragments packets?", options: ["Network", "Transport", "Data link", "Physical"], answer: 0 },
+  { question: "Which protocol supports fragmentation?", options: ["IP", "TCP", "UDP", "HTTP"], answer: 0 },
+  { question: "Hop count is?", options: ["Number of routers", "Packets", "Frames", "Signals"], answer: 0 },
+  { question: "Which protocol checks reachability?", options: ["ICMP", "TCP", "UDP", "FTP"], answer: 0 },
+  { question: "Traceroute uses?", options: ["ICMP", "HTTP", "FTP", "SMTP"], answer: 0 },
+
+  { question: "Routing decision is based on?", options: ["IP", "MAC", "Port", "URL"], answer: 0 },
+  { question: "Which protocol resolves domain name?", options: ["DNS", "IP", "ARP", "ICMP"], answer: 0 },
+  { question: "Which protocol is used in routing updates?", options: ["RIP", "HTTP", "FTP", "SMTP"], answer: 0 },
+  { question: "OSPF is?", options: ["Routing protocol", "Transport protocol", "Application protocol", "None"], answer: 0 },
+  { question: "RIP uses?", options: ["Hop count", "Bandwidth", "Delay", "Load"], answer: 0 },
+
+  { question: "Which is link state routing?", options: ["OSPF", "RIP", "BGP", "ARP"], answer: 0 },
+  { question: "Which is distance vector routing?", options: ["RIP", "OSPF", "BGP", "ICMP"], answer: 0 },
+  { question: "BGP is used for?", options: ["Internet routing", "LAN", "PAN", "MAN"], answer: 0 },
+  { question: "Which protocol is scalable?", options: ["OSPF", "RIP", "ARP", "ICMP"], answer: 0 },
+  { question: "Routing loops are avoided by?", options: ["TTL", "CRC", "Parity", "Checksum"], answer: 0 },
+
+  { question: "Forwarding means?", options: ["Send packet", "Store data", "Delete data", "Encode"], answer: 0 },
+  { question: "Network layer provides?", options: ["End-to-end delivery", "Node delivery", "Bit delivery", "None"], answer: 0 },
+  { question: "Logical addressing is?", options: ["IP", "MAC", "Port", "URL"], answer: 0 },
+  { question: "Which is hierarchical addressing?", options: ["IP", "MAC", "Port", "URL"], answer: 0 },
+  { question: "Subnet mask is used for?", options: ["Network division", "Routing", "Switching", "Encoding"], answer: 0 },
+
+  { question: "CIDR stands for?", options: ["Classless Inter Domain Routing", "Class Internet Routing", "Control Routing", "None"], answer: 0 },
+  { question: "Default gateway is?", options: ["Router", "Switch", "Hub", "Repeater"], answer: 0 },
+  { question: "Which is class A IP?", options: ["1.0.0.0", "192.168.1.1", "172.16.0.1", "224.0.0.1"], answer: 0 },
+  { question: "Which is class C IP?", options: ["192.168.1.1", "1.0.0.1", "10.0.0.1", "172.16.0.1"], answer: 0 },
+  { question: "Multicast address range?", options: ["224-239", "1-126", "128-191", "192-223"], answer: 0 },
+
+  { question: "Broadcast address?", options: ["All ones", "All zeros", "Random", "None"], answer: 0 },
+  { question: "Loopback address?", options: ["127.0.0.1", "192.168.1.1", "10.0.0.1", "8.8.8.8"], answer: 0 },
+  { question: "Which protocol resolves MAC?", options: ["ARP", "DNS", "ICMP", "TCP"], answer: 0 },
+  { question: "Which protocol reports errors?", options: ["ICMP", "ARP", "DNS", "TCP"], answer: 0 },
+  { question: "Which layer controls congestion?", options: ["Network", "Transport", "Data link", "Physical"], answer: 0 },
+
+  { question: "Which is connectionless delivery?", options: ["IP", "TCP", "FTP", "SMTP"], answer: 0 },
+  { question: "Which protocol ensures routing?", options: ["IP", "MAC", "Port", "URL"], answer: 0 },
+  { question: "Packet header contains?", options: ["Address", "Data", "Bits", "Signal"], answer: 0 },
+  { question: "IP header contains?", options: ["TTL", "Data", "Frame", "Signal"], answer: 0 },
+  { question: "Which field prevents looping?", options: ["TTL", "CRC", "Parity", "Checksum"], answer: 0 },
+
+  { question: "Which is fastest routing?", options: ["Shortest path", "Longest path", "Random", "None"], answer: 0 },
+  { question: "Congestion occurs due to?", options: ["High traffic", "Low traffic", "No traffic", "None"], answer: 0 },
+  { question: "Load balancing is?", options: ["Distribute traffic", "Route", "Switch", "Encode"], answer: 0 },
+  { question: "Firewall works at?", options: ["Network", "Transport", "Application", "All"], answer: 3 },
+  { question: "Which ensures secure routing?", options: ["IPSec", "HTTP", "FTP", "SMTP"], answer: 0 }
+  ,
+
+  { question: "Which protocol is used for secure IP communication?", options: ["IPSec", "HTTP", "FTP", "SMTP"], answer: 0 },
+  { question: "Which header field indicates packet length?", options: ["Total Length", "TTL", "Protocol", "Checksum"], answer: 0 },
+  { question: "Which field identifies next protocol?", options: ["Protocol", "TTL", "Length", "Address"], answer: 0 },
+  { question: "Which field checks header errors?", options: ["Checksum", "TTL", "Length", "Protocol"], answer: 0 },
+  { question: "Which field defines packet priority?", options: ["ToS", "TTL", "Length", "Checksum"], answer: 0 },
+
+  { question: "Which routing protocol uses link state algorithm?", options: ["OSPF", "RIP", "BGP", "ARP"], answer: 0 },
+  { question: "Which routing protocol uses hop count?", options: ["RIP", "OSPF", "BGP", "ICMP"], answer: 0 },
+  { question: "Which protocol is used between autonomous systems?", options: ["BGP", "RIP", "OSPF", "ARP"], answer: 0 },
+  { question: "Which protocol supports classless routing?", options: ["OSPF", "RIP v1", "ARP", "ICMP"], answer: 0 },
+  { question: "Which routing protocol is fastest converging?", options: ["OSPF", "RIP", "BGP", "ICMP"], answer: 0 },
+
+  { question: "Which addressing method supports scalability?", options: ["CIDR", "Classful", "MAC", "Port"], answer: 0 },
+  { question: "Which IP class supports multicast?", options: ["Class D", "Class A", "Class B", "Class C"], answer: 0 },
+  { question: "Which IP class is reserved for research?", options: ["Class E", "Class D", "Class C", "Class B"], answer: 0 },
+  { question: "Which field identifies fragmentation?", options: ["Identification", "TTL", "Protocol", "Checksum"], answer: 0 },
+  { question: "Which field indicates fragment position?", options: ["Offset", "TTL", "Protocol", "Length"], answer: 0 },
+
+  { question: "Which flag prevents fragmentation?", options: ["DF", "MF", "TTL", "ID"], answer: 0 },
+  { question: "Which flag indicates more fragments?", options: ["MF", "DF", "TTL", "ID"], answer: 0 },
+  { question: "Which layer handles packet forwarding?", options: ["Network", "Transport", "Data link", "Physical"], answer: 0 },
+  { question: "Which process determines best path?", options: ["Routing", "Switching", "Encoding", "Framing"], answer: 0 },
+  { question: "Which process sends packet to next hop?", options: ["Forwarding", "Routing", "Encoding", "Switching"], answer: 0 },
+
+  { question: "Which protocol is used for path discovery?", options: ["ICMP", "HTTP", "FTP", "SMTP"], answer: 0 },
+  { question: "Which metric measures routing efficiency?", options: ["Hop count", "Memory", "Storage", "CPU"], answer: 0 },
+  { question: "Which protocol supports error and control messages?", options: ["ICMP", "TCP", "UDP", "FTP"], answer: 0 },
+  { question: "Which routing avoids loops using sequence numbers?", options: ["Distance Vector", "Link State", "Flooding", "None"], answer: 0 },
+  { question: "Which method sends packets to all nodes?", options: ["Flooding", "Routing", "Switching", "Encoding"], answer: 0 }
+]

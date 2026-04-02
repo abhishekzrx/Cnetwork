@@ -1,0 +1,122 @@
+window.CNMCQS_2 = [
+  { question: "What is the primary function of Data Link Layer?", options: ["Routing", "Error detection", "Session control", "Encryption"], answer: 1 },
+  { question: "Which unit is used at Data Link Layer?", options: ["Packet", "Frame", "Segment", "Bit"], answer: 1 },
+  { question: "Framing means?", options: ["Error detection", "Dividing data into frames", "Routing", "Encoding"], answer: 1 },
+  { question: "Which address is used in Data Link Layer?", options: ["IP", "MAC", "Port", "URL"], answer: 1 },
+  { question: "MAC address is?", options: ["Logical", "Physical", "Temporary", "Dynamic"], answer: 1 },
+
+  { question: "Which protocol works at Data Link Layer?", options: ["HTTP", "FTP", "Ethernet", "SMTP"], answer: 2 },
+  { question: "Error detection uses?", options: ["CRC", "IP", "TCP", "UDP"], answer: 0 },
+  { question: "Parity bit is used for?", options: ["Error detection", "Routing", "Encryption", "Switching"], answer: 0 },
+  { question: "Switch works at?", options: ["Physical", "Data Link", "Network", "Transport"], answer: 1 },
+  { question: "Switch uses?", options: ["IP", "MAC", "Port", "URL"], answer: 1 },
+
+  { question: "Flow control ensures?", options: ["Speed matching", "Routing", "Encryption", "Storage"], answer: 0 },
+  { question: "Stop-and-wait is?", options: ["Flow control", "Routing", "Encoding", "Switching"], answer: 0 },
+  { question: "Sliding window is?", options: ["Flow control", "Routing", "Error detection", "Switching"], answer: 0 },
+  { question: "ARQ is used for?", options: ["Error correction", "Routing", "Encoding", "Switching"], answer: 0 },
+  { question: "ARQ stands for?", options: ["Automatic Repeat reQuest", "Auto Routing Query", "Address Request", "Access Routing Queue"], answer: 0 },
+
+  { question: "Bit stuffing is used in?", options: ["Framing", "Routing", "Encryption", "Switching"], answer: 0 },
+  { question: "Byte stuffing is used for?", options: ["Framing", "Routing", "Encryption", "Multiplexing"], answer: 0 },
+  { question: "CRC stands for?", options: ["Cyclic Redundancy Check", "Code Routing Check", "Control Rate Code", "Cyclic Routing Code"], answer: 0 },
+  { question: "Frame contains?", options: ["Header & trailer", "Only data", "Only address", "Only control"], answer: 0 },
+  { question: "Which field identifies sender?", options: ["Source", "Destination", "Data", "Control"], answer: 0 },
+
+  { question: "Which field identifies receiver?", options: ["Destination", "Source", "Control", "Data"], answer: 0 },
+  { question: "LLC stands for?", options: ["Logical Link Control", "Local Link Control", "Layer Link Control", "Logical Layer Communication"], answer: 0 },
+  { question: "MAC sublayer handles?", options: ["Addressing", "Routing", "Encryption", "Session"], answer: 0 },
+  { question: "LLC sublayer handles?", options: ["Flow & error control", "Routing", "Encryption", "Session"], answer: 0 },
+  { question: "FCS is used for?", options: ["Error detection", "Routing", "Encryption", "Flow control"], answer: 0 },
+
+  { question: "Which is bit-oriented protocol?", options: ["HDLC", "HTTP", "FTP", "SMTP"], answer: 0 },
+  { question: "Which protocol uses frames?", options: ["Ethernet", "IP", "TCP", "UDP"], answer: 0 },
+  { question: "Which provides reliable communication?", options: ["HDLC", "UDP", "IP", "DNS"], answer: 0 },
+  { question: "Which is connectionless?", options: ["Ethernet", "TCP", "FTP", "HTTP"], answer: 0 },
+  { question: "Which is connection-oriented?", options: ["HDLC", "UDP", "IP", "ICMP"], answer: 0 },
+
+  { question: "Which error detection uses polynomial?", options: ["CRC", "Parity", "Checksum", "ARQ"], answer: 0 },
+  { question: "Checksum is used in?", options: ["Error detection", "Routing", "Encryption", "Switching"], answer: 0 },
+  { question: "Which detects odd/even error?", options: ["Parity", "CRC", "Checksum", "ARQ"], answer: 0 },
+  { question: "Stop-and-wait allows?", options: ["One frame at a time", "Multiple frames", "No frames", "Infinite frames"], answer: 0 },
+  { question: "Sliding window improves?", options: ["Efficiency", "Storage", "Security", "Routing"], answer: 0 },
+
+  { question: "Piggybacking is used in?", options: ["Efficiency", "Routing", "Encoding", "Encryption"], answer: 0 },
+  { question: "Which reduces overhead?", options: ["Piggybacking", "CRC", "Parity", "Checksum"], answer: 0 },
+  { question: "Frame synchronization uses?", options: ["Flags", "Routing", "Switching", "Encoding"], answer: 0 },
+  { question: "Flag is used in?", options: ["Framing", "Routing", "Switching", "Encoding"], answer: 0 },
+  { question: "Which ensures data integrity?", options: ["CRC", "Routing", "Switching", "Encoding"], answer: 0 },
+
+  { question: "Bridge works at?", options: ["Data Link", "Network", "Transport", "Physical"], answer: 0 },
+  { question: "Bridge connects?", options: ["LAN segments", "WAN", "Internet", "PAN"], answer: 0 },
+  { question: "Collision occurs in?", options: ["Shared medium", "Dedicated medium", "Fiber", "Switch"], answer: 0 },
+  { question: "Which avoids collision?", options: ["Switch", "Hub", "Repeater", "Cable"], answer: 0 },
+  { question: "CSMA/CD is used in?", options: ["Ethernet", "Wi-Fi", "Bluetooth", "Satellite"], answer: 0 },
+
+  { question: "CSMA/CA is used in?", options: ["Wi-Fi", "Ethernet", "LAN", "MAN"], answer: 0 },
+  { question: "Full duplex means?", options: ["Simultaneous transmission", "One way", "Half way", "None"], answer: 0 },
+  { question: "Half duplex means?", options: ["One direction at a time", "Two direction", "Simultaneous", "None"], answer: 0 },
+  { question: "Simplex means?", options: ["One way", "Two way", "Full duplex", "Half duplex"], answer: 0 },
+  { question: "Data Link Layer ensures?", options: ["Node-to-node delivery", "End-to-end", "Routing", "Session"], answer: 0 },
+
+  { question: "Which layer does framing?", options: ["Data Link", "Network", "Transport", "Physical"], answer: 0 },
+  { question: "Which layer handles MAC?", options: ["Data Link", "Network", "Transport", "Physical"], answer: 0 },
+  { question: "Frame delimiter is?", options: ["Flag", "Packet", "Bit", "Signal"], answer: 0 },
+  { question: "Selective repeat is?", options: ["ARQ", "Routing", "Switching", "Encoding"], answer: 0 },
+  { question: "Go-back-N is?", options: ["ARQ", "Routing", "Encoding", "Switching"], answer: 0 },
+
+  { question: "MAC address length?", options: ["48-bit", "32-bit", "64-bit", "128-bit"], answer: 0 },
+  { question: "MAC address assigned by?", options: ["Manufacturer", "User", "ISP", "Router"], answer: 0 },
+  { question: "Ethernet uses?", options: ["CSMA/CD", "CSMA/CA", "Token", "Polling"], answer: 0 },
+  { question: "Wi-Fi uses?", options: ["CSMA/CA", "CSMA/CD", "Token", "Polling"], answer: 0 },
+  { question: "Token passing used in?", options: ["Ring", "Bus", "Star", "Mesh"], answer: 0 },
+
+  { question: "Broadcast means?", options: ["One to all", "One to one", "One to group", "None"], answer: 0 },
+  { question: "Unicast means?", options: ["One to one", "One to all", "One to group", "None"], answer: 0 },
+  { question: "Multicast means?", options: ["One to group", "One to one", "One to all", "None"], answer: 0 },
+  { question: "Which layer detects errors?", options: ["Data Link", "Network", "Transport", "Physical"], answer: 0 },
+  { question: "Which layer controls flow?", options: ["Data Link", "Network", "Transport", "Physical"], answer: 0 },
+
+  { question: "Frame header contains?", options: ["Address", "Data", "Bits", "Signal"], answer: 0 },
+  { question: "Trailer contains?", options: ["FCS", "Address", "Data", "Control"], answer: 0 },
+  { question: "Which is permanent address?", options: ["MAC", "IP", "Port", "URL"], answer: 0 },
+  { question: "Which is logical address?", options: ["IP", "MAC", "Port", "URL"], answer: 0 },
+  { question: "Which layer provides hop-to-hop delivery?", options: ["Data Link", "Network", "Transport", "Application"], answer: 0 },
+
+  { question: "Which layer uses frames?", options: ["Data Link", "Network", "Transport", "Physical"], answer: 0 },
+  { question: "Which technique adds extra bits?", options: ["Bit stuffing", "Routing", "Switching", "Multiplexing"], answer: 0 },
+  { question: "Which improves efficiency?", options: ["Sliding window", "Routing", "Switching", "Encoding"], answer: 0 },
+  { question: "Which protocol supports sliding window?", options: ["HDLC", "HTTP", "FTP", "SMTP"], answer: 0 },
+  { question: "Which is synchronous protocol?", options: ["HDLC", "FTP", "HTTP", "SMTP"], answer: 0 },
+
+  { question: "Which flag is used in HDLC?", options: ["01111110", "11111111", "00000000", "10101010"], answer: 0 },
+  { question: "Which ensures reliable link?", options: ["Data Link", "Network", "Transport", "Physical"], answer: 0 },
+  { question: "Which handles physical addressing?", options: ["MAC", "IP", "Port", "URL"], answer: 0 },
+  { question: "Which ensures node delivery?", options: ["Data Link", "Network", "Transport", "Physical"], answer: 0 },
+  { question: "Which layer hides errors?", options: ["Data Link", "Network", "Transport", "Physical"], answer: 0 }
+
+  ,
+  { question: "What is frame synchronization?", options: ["Aligning frames", "Routing data", "Encoding", "Switching"], answer: 0 },
+  { question: "Which technique ensures frame boundaries?", options: ["Flags", "Routing", "Switching", "Multiplexing"], answer: 0 },
+  { question: "Which field is used for error checking?", options: ["FCS", "Address", "Data", "Control"], answer: 0 },
+  { question: "Which protocol is widely used in LAN?", options: ["Ethernet", "IP", "TCP", "UDP"], answer: 0 },
+  { question: "Which standard defines Ethernet?", options: ["IEEE 802.3", "IEEE 802.11", "IEEE 802.5", "IEEE 802.15"], answer: 0 },
+
+  { question: "Which standard defines Wi-Fi?", options: ["IEEE 802.11", "IEEE 802.3", "IEEE 802.5", "IEEE 802.15"], answer: 0 },
+  { question: "Which protocol uses token passing?", options: ["Token Ring", "Ethernet", "Wi-Fi", "Bluetooth"], answer: 0 },
+  { question: "Which layer divides data into frames?", options: ["Data Link", "Network", "Transport", "Physical"], answer: 0 },
+  { question: "Which is used for error detection in Ethernet?", options: ["CRC", "Parity", "Checksum", "ARQ"], answer: 0 },
+  { question: "Which device filters frames?", options: ["Switch", "Hub", "Repeater", "Cable"], answer: 0 },
+
+  { question: "Which device does not filter data?", options: ["Hub", "Switch", "Bridge", "Router"], answer: 0 },
+  { question: "Which layer handles physical transmission errors?", options: ["Data Link", "Network", "Transport", "Application"], answer: 0 },
+  { question: "Which is connection-oriented Data Link protocol?", options: ["HDLC", "Ethernet", "IP", "UDP"], answer: 0 },
+  { question: "Which technique reduces unnecessary retransmission?", options: ["Selective Repeat", "Stop-and-wait", "Go-back-N", "None"], answer: 0 },
+  { question: "Which technique retransmits all frames after error?", options: ["Go-back-N", "Selective Repeat", "Stop-and-wait", "None"], answer: 0 },
+
+  { question: "Which protocol is used for framing in WAN?", options: ["HDLC", "Ethernet", "IP", "TCP"], answer: 0 },
+  { question: "Which ensures ordered delivery?", options: ["Sliding window", "Routing", "Switching", "Encoding"], answer: 0 },
+  { question: "Which type of error occurs due to noise?", options: ["Bit error", "Frame error", "Routing error", "Switching error"], answer: 0 },
+  { question: "Which layer provides reliable transmission between adjacent nodes?", options: ["Data Link", "Network", "Transport", "Physical"], answer: 0 },
+  { question: "Which technique is used to avoid flag duplication?", options: ["Bit stuffing", "Byte stuffing", "Routing", "Switching"], answer: 0 }
+]
